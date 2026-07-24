@@ -1,23 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { getGoals } from "@/application/services/goalsService";
 import { getHabits, isCompletedToday } from "@/application/services/habitsService";
 import { getEntries } from "@/application/services/journalService";
-import { Target, Flame, BookOpen, BarChart3, TrendingUp } from "lucide-react";
+import type { Goal } from "@/domain/entities/Goal";
+import type { Habit } from "@/domain/entities/Habit";
+import type { JournalEntry } from "@/domain/entities/Journal";
 
 export default function AnalyticsPage() {
-  const [goals, setGoals] = useState<any[]>([]);
-  const [habits, setHabits] = useState<any[]>([]);
-  const [entries, setEntries] = useState<any[]>([]);
-
-  useEffect(() => {
-    setGoals(getGoals());
-    setHabits(getHabits());
-    setEntries(getEntries());
-  }, []);
+  const [goals] = useState<Goal[]>(() => getGoals());
+  const [habits] = useState<Habit[]>(() => getHabits());
+  const [entries] = useState<JournalEntry[]>(() => getEntries());
 
   const activeGoals = goals.filter((g) => g.status === "active");
   const avgProgress = activeGoals.length

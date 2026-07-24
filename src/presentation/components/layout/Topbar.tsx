@@ -3,7 +3,6 @@
 import React from "react";
 import { useAuth } from "@/infrastructure/context/AuthContext";
 import { LogOut } from "lucide-react";
-import { Button } from "@/presentation/components/ui/Button";
 
 export function Topbar() {
   const { user, signOut } = useAuth();

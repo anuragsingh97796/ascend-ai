@@ -61,7 +61,7 @@ export const useAuthStore = create<AuthStore>()(
         });
       },
 
-      signUp: async (name, email, pass) => {
+      signUp: async (name, email) => {
         set({ isLoading: true, error: null });
         await delay(1500); // Simulate network
         if (email.includes("taken")) {

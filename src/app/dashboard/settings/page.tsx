@@ -6,7 +6,7 @@ import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
 import { getStoredAuth } from "@/application/services/authService";
 import {
-  User, Palette, Bell, Shield, Key, Download, Link2, HardDrive
+  User, Palette, Bell, Shield, Key, Download, Link2
 } from "lucide-react";
 
 const SECTIONS = [
@@ -25,10 +25,6 @@ export default function SettingsPage() {
   const auth = getStoredAuth();
   const user = auth?.user;
   const [activeTab, setActiveTab] = useState<SectionId>("profile");
-
-  const [emailNotifs, setEmailNotifs] = useState(true);
-  const [pushNotifs, setPushNotifs] = useState(true);
-  const [aiAnalysis, setAiAnalysis] = useState(true);
   const [nameInput, setNameInput] = useState(user?.name || "");
 
   return (

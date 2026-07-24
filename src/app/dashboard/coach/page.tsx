@@ -9,14 +9,10 @@ import type { ChatMessage } from "@/application/services/coachService";
 import { Send, Loader2 } from "lucide-react";
 
 export default function CoachPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => initHistory());
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMessages(initHistory());
-  }, []);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });

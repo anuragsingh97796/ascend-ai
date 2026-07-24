@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
@@ -9,11 +9,7 @@ import type { JournalEntry } from "@/domain/entities/Journal";
 import { Sparkles, Calendar } from "lucide-react";
 
 export default function JournalPage() {
-  const [entries, setEntries] = useState<JournalEntry[]>([]);
-
-  useEffect(() => {
-    setEntries(getEntries());
-  }, []);
+  const [entries] = useState<JournalEntry[]>(() => getEntries());
 
   const formatDate = (isoString: string) => {
     return new Date(isoString).toLocaleDateString("en-US", {

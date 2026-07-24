@@ -36,7 +36,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     { className, variant, label, error, helperText, wrapperClassName, maxCount, id, value, onChange, ...props },
     ref
   ) => {
-    const textareaId = id ?? React.useId();
+    const generatedId = React.useId();
+    const textareaId = id ?? generatedId;
     const isError = Boolean(error);
     const activeVariant = isError ? "error" : variant;
 

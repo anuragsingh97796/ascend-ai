@@ -1,26 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { getGoals } from "@/application/services/goalsService";
 import { getHabits } from "@/application/services/habitsService";
 import { getEntries } from "@/application/services/journalService";
+import type { Goal } from "@/domain/entities/Goal";
+import type { Habit } from "@/domain/entities/Habit";
+import type { JournalEntry } from "@/domain/entities/Journal";
 import {
   TrendingUp, Flame, Brain, Lightbulb, Trophy,
   Activity, GraduationCap, ShieldAlert
 } from "lucide-react";
 
 export default function InsightsPage() {
-  const [goals, setGoals] = useState<any[]>([]);
-  const [habits, setHabits] = useState<any[]>([]);
-  const [entries, setEntries] = useState<any[]>([]);
-
-  useEffect(() => {
-    setGoals(getGoals());
-    setHabits(getHabits());
-    setEntries(getEntries());
-  }, []);
+  const [goals] = useState<Goal[]>(() => getGoals());
+  const [habits] = useState<Habit[]>(() => getHabits());
+  const [entries] = useState<JournalEntry[]>(() => getEntries());
 
   const completedGoals = goals.filter((g) => g.status === "completed");
   const longestStreak = Math.max(0, ...habits.map((h) => h.currentStreak || 0));
@@ -41,7 +38,7 @@ export default function InsightsPage() {
             <h2 style={{ fontSize: 20, fontWeight: 700 }}>Weekly AI Performance Synthesis</h2>
           </div>
           <p style={{ color: "var(--text-secondary)", lineHeight: 1.6, fontSize: 14 }}>
-            "Your focus stability is up 18% compared to last week. You are maintaining strong habit momentum with high journaling activity. Here is your synthesized breakdown."
+            &quot;Your focus stability is up 18% compared to last week. You are maintaining strong habit momentum with high journaling activity. Here is your synthesized breakdown.&quot;
           </p>
         </GlassCard>
 

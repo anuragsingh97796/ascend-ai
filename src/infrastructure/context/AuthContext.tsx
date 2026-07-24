@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 import type { User } from "@/domain/entities/User";
 import {
   getStoredAuth,
@@ -26,14 +26,11 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
+  const [user, setUser] = useState<User | null>(() => {
     const stored = getStoredAuth();
-    if (stored?.isAuthenticated) setUser(stored.user);
-    setIsLoading(false);
-  }, []);
+    return stored?.isAuthenticated ? stored.user : null;
+  });
+  const [isLoading] = useState(false);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const u = await mockSignIn(email, password);

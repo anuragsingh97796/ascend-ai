@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
@@ -9,11 +9,7 @@ import type { Habit } from "@/domain/entities/Habit";
 import { Check, Flame } from "lucide-react";
 
 export default function HabitsPage() {
-  const [habits, setHabits] = useState<Habit[]>([]);
-
-  useEffect(() => {
-    setHabits(getHabits());
-  }, []);
+  const [habits, setHabits] = useState<Habit[]>(() => getHabits());
 
   const handleCheckIn = (id: string) => {
     const updated = toggleHabitToday(id);

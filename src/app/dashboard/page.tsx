@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
@@ -8,8 +8,11 @@ import { getGoals } from "@/application/services/goalsService";
 import { getHabits, toggleHabitToday, isCompletedToday } from "@/application/services/habitsService";
 import { getEntries } from "@/application/services/journalService";
 import { getStoredAuth } from "@/application/services/authService";
+import type { Goal } from "@/domain/entities/Goal";
+import type { Habit } from "@/domain/entities/Habit";
+import type { JournalEntry } from "@/domain/entities/Journal";
 import {
-  Target, Flame, BookOpen, Brain, Sparkles, ArrowRight,
+  Target, Flame, Brain, Sparkles, ArrowRight,
   TrendingUp, Compass, Lightbulb, RefreshCw
 } from "lucide-react";
 import Link from "next/link";
@@ -22,19 +25,14 @@ const DAILY_QUOTES = [
 ];
 
 export default function DashboardOverviewPage() {
-  const [user, setUser] = useState<{ name: string } | null>(null);
-  const [goals, setGoals] = useState<any[]>([]);
-  const [habits, setHabits] = useState<any[]>([]);
-  const [entries, setEntries] = useState<any[]>([]);
-  const [quoteIndex, setQuoteIndex] = useState(0);
-
-  useEffect(() => {
+  const [user] = useState<{ name: string } | null>(() => {
     const auth = getStoredAuth();
-    if (auth?.user) setUser(auth.user);
-    setGoals(getGoals());
-    setHabits(getHabits());
-    setEntries(getEntries());
-  }, []);
+    return auth?.user || null;
+  });
+  const [goals] = useState<Goal[]>(() => getGoals());
+  const [habits, setHabits] = useState<Habit[]>(() => getHabits());
+  const [entries] = useState<JournalEntry[]>(() => getEntries());
+  const [quoteIndex, setQuoteIndex] = useState(0);
 
   const handleHabitToggle = (habitId: string) => {
     const updated = toggleHabitToday(habitId);
@@ -68,7 +66,7 @@ export default function DashboardOverviewPage() {
                 Welcome back, <span style={{ background: "linear-gradient(135deg, #a78bfa, #6366f1, #06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{user?.name || "Ascender"}</span> 👋
               </h1>
               <p style={{ color: "var(--text-secondary)", fontSize: 15, maxWidth: 600 }}>
-                Your neural co-pilot has calibrated today's optimal growth path based on your goals, habits, and recent reflections.
+                Your neural co-pilot has calibrated today&apos;s optimal growth path based on your goals, habits, and recent reflections.
               </p>
             </div>
 
@@ -95,7 +93,7 @@ export default function DashboardOverviewPage() {
                   <Compass size={20} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Mission</h3>
+                  <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today&apos;s Mission</h3>
                   <p style={{ fontSize: 12, color: "var(--text-tertiary)" }}>Priority check-ins to maintain momentum</p>
                 </div>
               </div>
@@ -148,7 +146,7 @@ export default function DashboardOverviewPage() {
 
             <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>High Focus Window Detected</h3>
             <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: 20 }}>
-              "Based on your recent habit check-ins and logs, your peak focus window is right now. Complete your hardest goal task today before 3 PM."
+              &quot;Based on your recent habit check-ins and logs, your peak focus window is right now. Complete your hardest goal task today before 3 PM.&quot;
             </p>
 
             <Link href="/dashboard/coach" style={{ textDecoration: "none" }}>
@@ -199,7 +197,7 @@ export default function DashboardOverviewPage() {
               </div>
 
               <blockquote style={{ fontSize: 14, fontStyle: "italic", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: 12 }}>
-                "{currentQuote.quote}"
+                &quot;{currentQuote.quote}&quot;
               </blockquote>
               <p style={{ fontSize: 12, fontWeight: 600, textAlign: "right", color: "var(--text-primary)" }}>— {currentQuote.author}</p>
             </div>

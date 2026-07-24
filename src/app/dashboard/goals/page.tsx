@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
@@ -9,11 +9,7 @@ import type { Goal } from "@/domain/entities/Goal";
 import { CheckCircle2, Circle } from "lucide-react";
 
 export default function GoalsPage() {
-  const [goals, setGoals] = useState<Goal[]>([]);
-
-  useEffect(() => {
-    setGoals(getGoals());
-  }, []);
+  const [goals, setGoals] = useState<Goal[]>(() => getGoals());
 
   const handleToggle = (goalId: string, milestoneId: string) => {
     const updated = toggleMilestone(goalId, milestoneId);
