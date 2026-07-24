@@ -10,9 +10,7 @@ jobs:
   quality:
     name: Code Quality
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ascend-ai-mobile
+   
 
     steps:
       - name: Checkout code
@@ -23,8 +21,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: ascend-ai-mobile/package-lock.json
-
+          cache-dependency-path: package-lock.json
       - name: Install dependencies
         run: npm ci
 
