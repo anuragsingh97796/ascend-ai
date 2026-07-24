@@ -1,6 +1,10 @@
 // Application Service: Habits (localStorage)
 
-import type { Habit, HabitColor, HabitFrequency } from "@/domain/entities/Habit";
+import type {
+  Habit,
+  HabitColor,
+  HabitFrequency,
+} from "@/domain/entities/Habit";
 
 const KEY = "ascend:habits";
 
@@ -8,32 +12,62 @@ const today = () => new Date().toISOString().split("T")[0];
 
 const SEED: Habit[] = [
   {
-    id: "h1", name: "Morning Meditation", description: "10 minutes of mindfulness",
-    icon: "🧘", color: "purple", frequency: "daily", currentStreak: 12, longestStreak: 21,
+    id: "h1",
+    name: "Morning Meditation",
+    description: "10 minutes of mindfulness",
+    icon: "🧘",
+    color: "purple",
+    frequency: "daily",
+    currentStreak: 12,
+    longestStreak: 21,
     completedDates: Array.from({ length: 12 }, (_, i) => {
-      const d = new Date(); d.setDate(d.getDate() - i); return d.toISOString().split("T")[0];
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      return d.toISOString().split("T")[0];
     }),
     createdAt: "2026-06-15T00:00:00Z",
   },
   {
-    id: "h2", name: "Read 30 Pages", description: "Non-fiction reading habit",
-    icon: "📚", color: "cyan", frequency: "daily", currentStreak: 5, longestStreak: 14,
+    id: "h2",
+    name: "Read 30 Pages",
+    description: "Non-fiction reading habit",
+    icon: "📚",
+    color: "cyan",
+    frequency: "daily",
+    currentStreak: 5,
+    longestStreak: 14,
     completedDates: Array.from({ length: 5 }, (_, i) => {
-      const d = new Date(); d.setDate(d.getDate() - i); return d.toISOString().split("T")[0];
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      return d.toISOString().split("T")[0];
     }),
     createdAt: "2026-07-01T00:00:00Z",
   },
   {
-    id: "h3", name: "Evening Run", description: "3km minimum",
-    icon: "🏃", color: "emerald", frequency: "weekdays", currentStreak: 3, longestStreak: 8,
+    id: "h3",
+    name: "Evening Run",
+    description: "3km minimum",
+    icon: "🏃",
+    color: "emerald",
+    frequency: "weekdays",
+    currentStreak: 3,
+    longestStreak: 8,
     completedDates: Array.from({ length: 3 }, (_, i) => {
-      const d = new Date(); d.setDate(d.getDate() - i); return d.toISOString().split("T")[0];
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      return d.toISOString().split("T")[0];
     }),
     createdAt: "2026-07-05T00:00:00Z",
   },
   {
-    id: "h4", name: "No Social Media", description: "Until 6pm each day",
-    icon: "📵", color: "amber", frequency: "daily", currentStreak: 0, longestStreak: 5,
+    id: "h4",
+    name: "No Social Media",
+    description: "Until 6pm each day",
+    icon: "📵",
+    color: "amber",
+    frequency: "daily",
+    currentStreak: 0,
+    longestStreak: 5,
     completedDates: [],
     createdAt: "2026-07-10T00:00:00Z",
   },
@@ -44,18 +78,28 @@ export function getHabits(): Habit[] {
   try {
     const raw = localStorage.getItem(KEY);
     return raw ? JSON.parse(raw) : SEED;
-  } catch { return SEED; }
+  } catch {
+    return SEED;
+  }
 }
 
 function saveHabits(habits: Habit[]): void {
   localStorage.setItem(KEY, JSON.stringify(habits));
 }
 
-export function addHabit(habit: Omit<Habit, "id" | "createdAt" | "currentStreak" | "longestStreak" | "completedDates">): Habit[] {
+export function addHabit(
+  habit: Omit<
+    Habit,
+    "id" | "createdAt" | "currentStreak" | "longestStreak" | "completedDates"
+  >
+): Habit[] {
   const habits = getHabits();
   const newHabit: Habit = {
-    ...habit, id: `h_${Date.now()}`,
-    currentStreak: 0, longestStreak: 0, completedDates: [],
+    ...habit,
+    id: `h_${Date.now()}`,
+    currentStreak: 0,
+    longestStreak: 0,
+    completedDates: [],
     createdAt: new Date().toISOString(),
   };
   const updated = [newHabit, ...habits];
@@ -91,8 +135,10 @@ function calcStreak(dates: string[]): number {
   const check = new Date();
   for (const d of sorted) {
     const expected = check.toISOString().split("T")[0];
-    if (d === expected) { streak++; check.setDate(check.getDate() - 1); }
-    else if (d < expected) break;
+    if (d === expected) {
+      streak++;
+      check.setDate(check.getDate() - 1);
+    } else if (d < expected) break;
   }
   return streak;
 }

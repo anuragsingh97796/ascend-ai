@@ -24,7 +24,7 @@ export default function CoachPage() {
 
     const text = input.trim();
     setInput("");
-    
+
     // Optimistic UI for user message
     const tempUserMsg: ChatMessage = {
       id: `temp_${Date.now()}`,
@@ -33,7 +33,7 @@ export default function CoachPage() {
       timestamp: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, tempUserMsg]);
-    
+
     setLoading(true);
     const updated = await sendMessage(text);
     setMessages(updated);
@@ -42,23 +42,59 @@ export default function CoachPage() {
 
   return (
     <PageTransition>
-      <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 120px)", maxWidth: 800, margin: "0 auto" }}>
-        
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          height: "calc(100vh - 120px)",
+          maxWidth: 800,
+          margin: "0 auto",
+        }}
+      >
         {/* Header section with Orb */}
-        <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: 32 }}>
-          <div style={{ transform: "scale(0.8)", transformOrigin: "left center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 24,
+            marginBottom: 32,
+          }}
+        >
+          <div
+            style={{ transform: "scale(0.8)", transformOrigin: "left center" }}
+          >
             <Orb />
           </div>
           <div>
-            <h1 style={{ fontSize: 28, fontWeight: 600, marginBottom: 8 }}>AI Coach</h1>
-            <p style={{ color: "var(--text-secondary)" }}>Your personal guide for continuous growth.</p>
+            <h1 style={{ fontSize: 28, fontWeight: 600, marginBottom: 8 }}>
+              AI Coach
+            </h1>
+            <p style={{ color: "var(--text-secondary)" }}>
+              Your personal guide for continuous growth.
+            </p>
           </div>
         </div>
 
         {/* Chat Area */}
-        <GlassCard className="flex-1" style={{ display: "flex", flexDirection: "column", padding: 0, overflow: "hidden" }}>
-          
-          <div style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", flexDirection: "column", gap: 20 }}>
+        <GlassCard
+          className="flex-1"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            padding: 0,
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              flex: 1,
+              overflowY: "auto",
+              padding: 24,
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+            }}
+          >
             {messages.map((msg) => {
               const isAssistant = msg.role === "assistant";
               return (
@@ -74,13 +110,21 @@ export default function CoachPage() {
                       maxWidth: "80%",
                       padding: "12px 16px",
                       borderRadius: "var(--radius-md)",
-                      background: isAssistant ? "rgba(255,255,255,0.05)" : "var(--accent)",
+                      background: isAssistant
+                        ? "rgba(255,255,255,0.05)"
+                        : "var(--accent)",
                       color: "#fff",
                       fontSize: 14,
                       lineHeight: 1.5,
-                      border: isAssistant ? "1px solid var(--glass-border)" : "none",
-                      borderBottomLeftRadius: isAssistant ? 4 : "var(--radius-md)",
-                      borderBottomRightRadius: !isAssistant ? 4 : "var(--radius-md)",
+                      border: isAssistant
+                        ? "1px solid var(--glass-border)"
+                        : "none",
+                      borderBottomLeftRadius: isAssistant
+                        ? 4
+                        : "var(--radius-md)",
+                      borderBottomRightRadius: !isAssistant
+                        ? 4
+                        : "var(--radius-md)",
                     }}
                   >
                     {msg.content}
@@ -99,7 +143,10 @@ export default function CoachPage() {
                     borderBottomLeftRadius: 4,
                   }}
                 >
-                  <Loader2 size={16} className="animate-spin text-text-secondary" />
+                  <Loader2
+                    size={16}
+                    className="animate-spin text-text-secondary"
+                  />
                 </div>
               </div>
             )}
@@ -107,7 +154,13 @@ export default function CoachPage() {
           </div>
 
           {/* Input Area */}
-          <div style={{ padding: "16px 24px", borderTop: "1px solid var(--glass-border)", background: "rgba(0,0,0,0.2)" }}>
+          <div
+            style={{
+              padding: "16px 24px",
+              borderTop: "1px solid var(--glass-border)",
+              background: "rgba(0,0,0,0.2)",
+            }}
+          >
             <form onSubmit={handleSend} style={{ display: "flex", gap: 12 }}>
               <input
                 type="text"
@@ -122,7 +175,10 @@ export default function CoachPage() {
                 type="submit"
                 disabled={!input.trim() || loading}
                 style={{
-                  background: input.trim() && !loading ? "var(--accent)" : "rgba(255,255,255,0.1)",
+                  background:
+                    input.trim() && !loading
+                      ? "var(--accent)"
+                      : "rgba(255,255,255,0.1)",
                   border: "none",
                   borderRadius: "var(--radius-sm)",
                   width: 44,
@@ -138,7 +194,6 @@ export default function CoachPage() {
               </button>
             </form>
           </div>
-          
         </GlassCard>
       </div>
     </PageTransition>

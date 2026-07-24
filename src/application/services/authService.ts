@@ -13,7 +13,10 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-export function getStoredAuth(): { user: User; isAuthenticated: boolean } | null {
+export function getStoredAuth(): {
+  user: User;
+  isAuthenticated: boolean;
+} | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(KEY);
@@ -37,7 +40,10 @@ export async function mockSignIn(
 ): Promise<User> {
   await new Promise((r) => setTimeout(r, 900));
   if (!email || password.length < 6) throw new Error("Invalid credentials.");
-  const name = email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const name = email
+    .split("@")[0]
+    .replace(/[._]/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
   const user: User = {
     id: `u_${Date.now()}`,
     name,

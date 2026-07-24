@@ -11,8 +11,10 @@ const textareaVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-border hover:border-border/80 focus-visible:border-brand-500/50 focus-visible:ring-brand-500/20",
-        error: "border-error/50 bg-error/5 focus-visible:border-error focus-visible:ring-error/20",
+        default:
+          "border-border hover:border-border/80 focus-visible:border-brand-500/50 focus-visible:ring-brand-500/20",
+        error:
+          "border-error/50 bg-error/5 focus-visible:border-error focus-visible:ring-error/20",
       },
     },
     defaultVariants: {
@@ -22,7 +24,8 @@ const textareaVariants = cva(
 );
 
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  extends
+    React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     VariantProps<typeof textareaVariants> {
   label?: string;
   error?: string;
@@ -33,7 +36,19 @@ export interface TextareaProps
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
-    { className, variant, label, error, helperText, wrapperClassName, maxCount, id, value, onChange, ...props },
+    {
+      className,
+      variant,
+      label,
+      error,
+      helperText,
+      wrapperClassName,
+      maxCount,
+      id,
+      value,
+      onChange,
+      ...props
+    },
     ref
   ) => {
     const generatedId = React.useId();
@@ -47,37 +62,60 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className={cn("flex flex-col gap-1.5 w-full", wrapperClassName)}>
         {label && (
-          <label htmlFor={textareaId} className="text-sm font-medium text-text-primary ml-0.5">
+          <label
+            htmlFor={textareaId}
+            className="text-sm font-medium text-text-primary ml-0.5"
+          >
             {label}
           </label>
         )}
         <div className="relative">
           <textarea
             id={textareaId}
-            className={cn(textareaVariants({ variant: activeVariant }), className)}
+            className={cn(
+              textareaVariants({ variant: activeVariant }),
+              className
+            )}
             ref={ref}
             value={value}
             onChange={onChange}
             aria-invalid={isError || isOverLimit}
-            aria-describedby={error ? `${textareaId}-error` : helperText ? `${textareaId}-helper` : undefined}
+            aria-describedby={
+              error
+                ? `${textareaId}-error`
+                : helperText
+                  ? `${textareaId}-helper`
+                  : undefined
+            }
             {...props}
           />
         </div>
         <div className="flex items-start justify-between gap-4 ml-0.5">
           <div className="flex-1">
             {error && (
-              <p id={`${textareaId}-error`} className="text-xs text-error font-medium animate-in slide-in-from-top-1 fade-in-50 duration-200">
+              <p
+                id={`${textareaId}-error`}
+                className="text-xs text-error font-medium animate-in slide-in-from-top-1 fade-in-50 duration-200"
+              >
                 {error}
               </p>
             )}
             {helperText && !error && (
-              <p id={`${textareaId}-helper`} className="text-xs text-text-tertiary">
+              <p
+                id={`${textareaId}-helper`}
+                className="text-xs text-text-tertiary"
+              >
                 {helperText}
               </p>
             )}
           </div>
           {maxCount && (
-            <p className={cn("text-[11px] shrink-0 mt-0.5", isOverLimit ? "text-error font-medium" : "text-text-disabled")}>
+            <p
+              className={cn(
+                "text-[11px] shrink-0 mt-0.5",
+                isOverLimit ? "text-error font-medium" : "text-text-disabled"
+              )}
+            >
               {count} / {maxCount}
             </p>
           )}

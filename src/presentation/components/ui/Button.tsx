@@ -3,12 +3,19 @@
 import React from "react";
 import { motion, HTMLMotionProps } from "framer-motion";
 
-interface ButtonProps extends Omit<HTMLMotionProps<"button">, "onAnimationStart" | "onDragStart" | "onDragEnd" | "onDrag"> {
+interface ButtonProps extends Omit<
+  HTMLMotionProps<"button">,
+  "onAnimationStart" | "onDragStart" | "onDragEnd" | "onDrag"
+> {
   variant?: "primary" | "glass" | "ghost";
   children: React.ReactNode;
 }
 
-export const Button: React.FC<ButtonProps> = ({ variant = "primary", children, ...props }) => {
+export const Button: React.FC<ButtonProps> = ({
+  variant = "primary",
+  children,
+  ...props
+}) => {
   const baseStyle = {
     padding: "12px 24px",
     borderRadius: "var(--radius-full)",
@@ -52,7 +59,15 @@ export const Button: React.FC<ButtonProps> = ({ variant = "primary", children, .
       style={{ ...baseStyle, ...variants[variant] }}
       {...props}
     >
-      <span style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", gap: "8px" }}>
+      <span
+        style={{
+          position: "relative",
+          zIndex: 1,
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
         {children}
       </span>
     </motion.button>

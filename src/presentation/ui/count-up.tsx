@@ -33,8 +33,11 @@ export function CountUp({
 
     const animate = (timestamp: number) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
-      const progress = Math.min((timestamp - startTimeRef.current) / (duration * 1000), 1);
-      
+      const progress = Math.min(
+        (timestamp - startTimeRef.current) / (duration * 1000),
+        1
+      );
+
       const easedProgress = 1 - Math.pow(1 - progress, 3);
       const currentVal = start + (end - start) * easedProgress;
 

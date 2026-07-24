@@ -21,10 +21,21 @@ export default function JournalPage() {
 
   return (
     <PageTransition>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          marginBottom: 32,
+        }}
+      >
         <div>
-          <h1 style={{ fontSize: 28, fontWeight: 600, marginBottom: 8 }}>Journal</h1>
-          <p style={{ color: "var(--text-secondary)" }}>Reflect on your progress and capture your thoughts.</p>
+          <h1 style={{ fontSize: 28, fontWeight: 600, marginBottom: 8 }}>
+            Journal
+          </h1>
+          <p style={{ color: "var(--text-secondary)" }}>
+            Reflect on your progress and capture your thoughts.
+          </p>
         </div>
         <Button variant="primary">New Entry</Button>
       </div>
@@ -32,11 +43,30 @@ export default function JournalPage() {
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {entries.map((entry, i) => (
           <GlassCard key={entry.id} delay={i * 0.1}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginBottom: 16,
+              }}
+            >
               <div>
-                <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>{entry.title}</h3>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 12, color: "var(--text-secondary)" }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>
+                  {entry.title}
+                </h3>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    fontSize: 12,
+                    color: "var(--text-secondary)",
+                  }}
+                >
+                  <span
+                    style={{ display: "flex", alignItems: "center", gap: 4 }}
+                  >
                     <Calendar size={12} /> {formatDate(entry.createdAt)}
                   </span>
                   <span>{entry.wordCount} words</span>
@@ -45,14 +75,24 @@ export default function JournalPage() {
               </div>
               <div style={{ display: "flex", gap: 6 }}>
                 {entry.tags.map((tag) => (
-                  <span key={tag} className="badge bg-background-secondary text-text-secondary border-glass-border">
+                  <span
+                    key={tag}
+                    className="badge bg-background-secondary text-text-secondary border-glass-border"
+                  >
                     #{tag}
                   </span>
                 ))}
               </div>
             </div>
 
-            <p style={{ fontSize: 14, color: "var(--text-primary)", lineHeight: 1.6, marginBottom: 20 }}>
+            <p
+              style={{
+                fontSize: 14,
+                color: "var(--text-primary)",
+                lineHeight: 1.6,
+                marginBottom: 20,
+              }}
+            >
               {entry.content}
             </p>
 
@@ -71,10 +111,23 @@ export default function JournalPage() {
                   <Sparkles size={16} />
                 </div>
                 <div>
-                  <p style={{ fontSize: 12, fontWeight: 600, color: "var(--accent)", marginBottom: 4 }}>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: "var(--accent)",
+                      marginBottom: 4,
+                    }}
+                  >
                     AI Insight
                   </p>
-                  <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.5,
+                    }}
+                  >
                     {entry.aiInsight}
                   </p>
                 </div>

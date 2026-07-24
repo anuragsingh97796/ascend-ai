@@ -1,7 +1,8 @@
 // Domain Entity: Habit
 
 export type HabitFrequency = "daily" | "weekdays" | "weekends" | "weekly";
-export type HabitColor = "purple" | "cyan" | "emerald" | "amber" | "rose" | "indigo";
+export type HabitColor =
+  "purple" | "cyan" | "emerald" | "amber" | "rose" | "indigo";
 
 export interface Habit {
   id: string;

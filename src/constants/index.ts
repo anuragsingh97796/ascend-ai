@@ -3,7 +3,8 @@
  */
 
 export const APP_NAME = "Ascend AI" as const;
-export const APP_TAGLINE = "Your AI Powered Personal Transformation Platform" as const;
+export const APP_TAGLINE =
+  "Your AI Powered Personal Transformation Platform" as const;
 export const APP_VERSION = "0.1.0" as const;
 
 export const LAYOUT = {

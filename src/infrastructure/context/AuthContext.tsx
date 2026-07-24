@@ -37,10 +37,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(u);
   }, []);
 
-  const signUp = useCallback(async (name: string, email: string, password: string) => {
-    const u = await mockSignUp(name, email, password);
-    setUser(u);
-  }, []);
+  const signUp = useCallback(
+    async (name: string, email: string, password: string) => {
+      const u = await mockSignUp(name, email, password);
+      setUser(u);
+    },
+    []
+  );
 
   const signOut = useCallback(() => {
     clearStoredAuth();
@@ -60,7 +63,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated: !!user, isLoading, signIn, signUp, signOut, updateUser }}
+      value={{
+        user,
+        isAuthenticated: !!user,
+        isLoading,
+        signIn,
+        signUp,
+        signOut,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

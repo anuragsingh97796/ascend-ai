@@ -10,7 +10,12 @@ interface GlassCardProps {
   style?: React.CSSProperties;
 }
 
-export const GlassCard: React.FC<GlassCardProps> = ({ children, className = "", delay = 0, style }) => {
+export const GlassCard: React.FC<GlassCardProps> = ({
+  children,
+  className = "",
+  delay = 0,
+  style,
+}) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

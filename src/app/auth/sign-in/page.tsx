@@ -66,9 +66,14 @@ function LoginForm() {
             Welcome back
           </h2>
 
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: "flex", flexDirection: "column", gap: 18 }}
+          >
             <div className="form-group">
-              <label className="form-label" htmlFor="email">Email</label>
+              <label className="form-label" htmlFor="email">
+                Email
+              </label>
               <input
                 id="email"
                 className="form-input"
@@ -82,7 +87,9 @@ function LoginForm() {
             </div>
 
             <div className="form-group">
-              <label className="form-label" htmlFor="password">Password</label>
+              <label className="form-label" htmlFor="password">
+                Password
+              </label>
               <input
                 id="password"
                 className="form-input"
@@ -150,7 +157,11 @@ function LoginForm() {
             New here?{" "}
             <Link
               href="/auth/register"
-              style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}
+              style={{
+                color: "var(--accent)",
+                textDecoration: "none",
+                fontWeight: 500,
+              }}
             >
               Create an account
             </Link>

@@ -18,10 +18,21 @@ export default function GoalsPage() {
 
   return (
     <PageTransition>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          marginBottom: 32,
+        }}
+      >
         <div>
-          <h1 style={{ fontSize: 28, fontWeight: 600, marginBottom: 8 }}>Goals</h1>
-          <p style={{ color: "var(--text-secondary)" }}>Track and manage your long-term objectives.</p>
+          <h1 style={{ fontSize: 28, fontWeight: 600, marginBottom: 8 }}>
+            Goals
+          </h1>
+          <p style={{ color: "var(--text-secondary)" }}>
+            Track and manage your long-term objectives.
+          </p>
         </div>
         <Button variant="primary">New Goal</Button>
       </div>
@@ -30,23 +41,49 @@ export default function GoalsPage() {
         {goals.map((goal, i) => (
           <GlassCard key={goal.id} delay={i * 0.1}>
             <div style={{ marginBottom: 16 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 8,
+                }}
+              >
                 <h3 style={{ fontSize: 18, fontWeight: 600 }}>{goal.title}</h3>
-                <span className="badge" style={{ background: `var(--cat-${goal.category})`, color: "#fff", opacity: 0.8 }}>
+                <span
+                  className="badge"
+                  style={{
+                    background: `var(--cat-${goal.category})`,
+                    color: "#fff",
+                    opacity: 0.8,
+                  }}
+                >
                   {goal.category}
                 </span>
               </div>
-              <p style={{ fontSize: 13, color: "var(--text-secondary)" }}>{goal.description}</p>
+              <p style={{ fontSize: 13, color: "var(--text-secondary)" }}>
+                {goal.description}
+              </p>
             </div>
 
             {/* Progress */}
             <div style={{ marginBottom: 20 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 6 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: 12,
+                  marginBottom: 6,
+                }}
+              >
                 <span>Progress</span>
                 <span style={{ fontWeight: 600 }}>{goal.progress}%</span>
               </div>
               <div className="progress-track">
-                <div className="progress-fill" style={{ width: `${goal.progress}%` }} />
+                <div
+                  className="progress-fill"
+                  style={{ width: `${goal.progress}%` }}
+                />
               </div>
             </div>
 
@@ -64,7 +101,9 @@ export default function GoalsPage() {
                     border: "1px solid rgba(255,255,255,0.05)",
                     padding: "10px 12px",
                     borderRadius: "var(--radius-sm)",
-                    color: m.completed ? "var(--text-secondary)" : "var(--text-primary)",
+                    color: m.completed
+                      ? "var(--text-secondary)"
+                      : "var(--text-primary)",
                     cursor: "pointer",
                     textAlign: "left",
                   }}
@@ -74,7 +113,12 @@ export default function GoalsPage() {
                   ) : (
                     <Circle size={16} color="var(--text-tertiary)" />
                   )}
-                  <span style={{ fontSize: 13, textDecoration: m.completed ? "line-through" : "none" }}>
+                  <span
+                    style={{
+                      fontSize: 13,
+                      textDecoration: m.completed ? "line-through" : "none",
+                    }}
+                  >
                     {m.title}
                   </span>
                 </button>

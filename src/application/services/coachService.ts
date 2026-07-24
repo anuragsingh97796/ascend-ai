@@ -17,13 +17,20 @@ const GREETINGS = [
 
 const RESPONSES: Record<string, string> = {
   goal: "Great focus on your goals! Try breaking each goal into a 3-step micro-plan for this week. What's your most important goal right now?",
-  habit: "Habits compound over time — you're building the right foundation. Your current streak is impressive. What habit feels hardest to maintain?",
-  stress: "Stress is information. Let's convert it: what specifically triggered it? Once identified, we can build a response protocol.",
-  motivation: "Motivation follows action, not the other way around. Start with 2 minutes on your lowest-resistance task and momentum will build.",
-  journal: "Journaling is a high-leverage tool. Daily entries correlate with 34% better goal completion. What would you like to reflect on?",
-  sleep: "Sleep is the highest-ROI performance lever. Even 30 minutes more can increase focus by 20%. What's your current sleep schedule?",
-  focus: "Deep work requires an environment contract. Remove all notifications for 90 minutes and signal to others you're unavailable. Try it today.",
-  default: "That's worth exploring further. Tell me more — what's the core challenge underneath this? I want to give you a precise response.",
+  habit:
+    "Habits compound over time — you're building the right foundation. Your current streak is impressive. What habit feels hardest to maintain?",
+  stress:
+    "Stress is information. Let's convert it: what specifically triggered it? Once identified, we can build a response protocol.",
+  motivation:
+    "Motivation follows action, not the other way around. Start with 2 minutes on your lowest-resistance task and momentum will build.",
+  journal:
+    "Journaling is a high-leverage tool. Daily entries correlate with 34% better goal completion. What would you like to reflect on?",
+  sleep:
+    "Sleep is the highest-ROI performance lever. Even 30 minutes more can increase focus by 20%. What's your current sleep schedule?",
+  focus:
+    "Deep work requires an environment contract. Remove all notifications for 90 minutes and signal to others you're unavailable. Try it today.",
+  default:
+    "That's worth exploring further. Tell me more — what's the core challenge underneath this? I want to give you a precise response.",
 };
 
 function pickResponse(userMessage: string): string {
@@ -39,7 +46,9 @@ export function getHistory(): ChatMessage[] {
   try {
     const raw = localStorage.getItem(KEY);
     return raw ? JSON.parse(raw) : [];
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 
 export function initHistory(): ChatMessage[] {

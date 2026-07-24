@@ -42,8 +42,13 @@ interface GoalsState {
 }
 
 interface GoalsActions {
-  addGoal: (goal: Omit<Goal, "id" | "createdAt" | "updatedAt" | "progress">) => void;
-  updateGoal: (id: string, updates: Partial<Omit<Goal, "id" | "createdAt">>) => void;
+  addGoal: (
+    goal: Omit<Goal, "id" | "createdAt" | "updatedAt" | "progress">
+  ) => void;
+  updateGoal: (
+    id: string,
+    updates: Partial<Omit<Goal, "id" | "createdAt">>
+  ) => void;
   deleteGoal: (id: string) => void;
   toggleMilestone: (goalId: string, milestoneId: string) => void;
   setFilter: (filter: GoalStatus | "all") => void;
@@ -51,7 +56,10 @@ interface GoalsActions {
 
 type GoalsStore = GoalsState & GoalsActions;
 
-const calcProgress = (milestones: Milestone[], manualProgress?: number): number => {
+const calcProgress = (
+  milestones: Milestone[],
+  manualProgress?: number
+): number => {
   if (milestones.length === 0) return manualProgress ?? 0;
   const done = milestones.filter((m) => m.completed).length;
   return Math.round((done / milestones.length) * 100);
@@ -61,14 +69,25 @@ const SEED_GOALS: Goal[] = [
   {
     id: "g1",
     title: "Complete TypeScript Mastery Course",
-    description: "Become proficient in TypeScript including advanced types, generics, and patterns.",
+    description:
+      "Become proficient in TypeScript including advanced types, generics, and patterns.",
     category: "learning",
     status: "active",
     progress: 60,
     targetDate: "2026-09-01",
     milestones: [
-      { id: "m1", title: "Finish basics module", completed: true, completedAt: "2026-07-01" },
-      { id: "m2", title: "Complete advanced types", completed: true, completedAt: "2026-07-10" },
+      {
+        id: "m1",
+        title: "Finish basics module",
+        completed: true,
+        completedAt: "2026-07-01",
+      },
+      {
+        id: "m2",
+        title: "Complete advanced types",
+        completed: true,
+        completedAt: "2026-07-10",
+      },
       { id: "m3", title: "Build a project with TS", completed: false },
     ],
     createdAt: "2026-06-15T10:00:00Z",
@@ -77,13 +96,19 @@ const SEED_GOALS: Goal[] = [
   {
     id: "g2",
     title: "Run a 5K in under 25 minutes",
-    description: "Train consistently 3x per week to improve my running pace and endurance.",
+    description:
+      "Train consistently 3x per week to improve my running pace and endurance.",
     category: "health",
     status: "active",
     progress: 40,
     targetDate: "2026-08-15",
     milestones: [
-      { id: "m4", title: "Run 5K without stopping", completed: true, completedAt: "2026-06-20" },
+      {
+        id: "m4",
+        title: "Run 5K without stopping",
+        completed: true,
+        completedAt: "2026-06-20",
+      },
       { id: "m5", title: "Complete 8-week training", completed: false },
       { id: "m6", title: "Sub-28 minute 5K", completed: false },
     ],
@@ -117,7 +142,9 @@ export const useGoalsStore = create<GoalsStore>()(
               ? {
                   ...g,
                   ...updates,
-                  progress: updates.milestones ? calcProgress(updates.milestones) : g.progress,
+                  progress: updates.milestones
+                    ? calcProgress(updates.milestones)
+                    : g.progress,
                   updatedAt: new Date().toISOString(),
                 }
               : g
@@ -131,10 +158,21 @@ export const useGoalsStore = create<GoalsStore>()(
             if (g.id !== goalId) return g;
             const milestones = g.milestones.map((m) =>
               m.id === milestoneId
-                ? { ...m, completed: !m.completed, completedAt: !m.completed ? new Date().toISOString() : undefined }
+                ? {
+                    ...m,
+                    completed: !m.completed,
+                    completedAt: !m.completed
+                      ? new Date().toISOString()
+                      : undefined,
+                  }
                 : m
             );
-            return { ...g, milestones, progress: calcProgress(milestones), updatedAt: new Date().toISOString() };
+            return {
+              ...g,
+              milestones,
+              progress: calcProgress(milestones),
+              updatedAt: new Date().toISOString(),
+            };
           }),
         })),
       setFilter: (filter) => set({ filter }),

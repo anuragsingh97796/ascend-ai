@@ -38,7 +38,9 @@ export function Switch({
         "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent",
         "transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
         disabled && "cursor-not-allowed opacity-50",
-        checked ? "bg-brand-500 shadow-[0_0_12px_rgba(139,92,246,0.5)]" : "bg-neutral-300 dark:bg-neutral-800",
+        checked
+          ? "bg-brand-500 shadow-[0_0_12px_rgba(139,92,246,0.5)]"
+          : "bg-neutral-300 dark:bg-neutral-800",
         className
       )}
     >

@@ -14,8 +14,18 @@ const SEED: Goal[] = [
     progress: 60,
     targetDate: "2026-09-01",
     milestones: [
-      { id: "m1", title: "Complete basics", completed: true, completedAt: "2026-07-01" },
-      { id: "m2", title: "Advanced types", completed: true, completedAt: "2026-07-10" },
+      {
+        id: "m1",
+        title: "Complete basics",
+        completed: true,
+        completedAt: "2026-07-01",
+      },
+      {
+        id: "m2",
+        title: "Advanced types",
+        completed: true,
+        completedAt: "2026-07-10",
+      },
       { id: "m3", title: "Build a project", completed: false },
     ],
     createdAt: "2026-06-15T10:00:00Z",
@@ -30,7 +40,12 @@ const SEED: Goal[] = [
     progress: 40,
     targetDate: "2026-08-15",
     milestones: [
-      { id: "m4", title: "Run 5K non-stop", completed: true, completedAt: "2026-06-20" },
+      {
+        id: "m4",
+        title: "Run 5K non-stop",
+        completed: true,
+        completedAt: "2026-06-20",
+      },
       { id: "m5", title: "8-week program", completed: false },
       { id: "m6", title: "Sub-28 min", completed: false },
     ],
@@ -46,9 +61,24 @@ const SEED: Goal[] = [
     progress: 75,
     targetDate: "2026-12-31",
     milestones: [
-      { id: "m7", title: "Save $2,500", completed: true, completedAt: "2026-04-01" },
-      { id: "m8", title: "Reach $5,000", completed: true, completedAt: "2026-06-15" },
-      { id: "m9", title: "Reach $7,500", completed: true, completedAt: "2026-07-10" },
+      {
+        id: "m7",
+        title: "Save $2,500",
+        completed: true,
+        completedAt: "2026-04-01",
+      },
+      {
+        id: "m8",
+        title: "Reach $5,000",
+        completed: true,
+        completedAt: "2026-06-15",
+      },
+      {
+        id: "m9",
+        title: "Reach $7,500",
+        completed: true,
+        completedAt: "2026-07-10",
+      },
       { id: "m10", title: "Complete $10,000", completed: false },
     ],
     createdAt: "2026-01-01T00:00:00Z",
@@ -58,7 +88,9 @@ const SEED: Goal[] = [
 
 function calcProgress(milestones: Milestone[]): number {
   if (!milestones.length) return 0;
-  return Math.round((milestones.filter((m) => m.completed).length / milestones.length) * 100);
+  return Math.round(
+    (milestones.filter((m) => m.completed).length / milestones.length) * 100
+  );
 }
 
 export function getGoals(): Goal[] {
@@ -75,7 +107,9 @@ function saveGoals(goals: Goal[]): void {
   localStorage.setItem(KEY, JSON.stringify(goals));
 }
 
-export function addGoal(goal: Omit<Goal, "id" | "createdAt" | "updatedAt" | "progress">): Goal[] {
+export function addGoal(
+  goal: Omit<Goal, "id" | "createdAt" | "updatedAt" | "progress">
+): Goal[] {
   const goals = getGoals();
   const newGoal: Goal = {
     ...goal,
@@ -89,13 +123,18 @@ export function addGoal(goal: Omit<Goal, "id" | "createdAt" | "updatedAt" | "pro
   return updated;
 }
 
-export function updateGoal(id: string, updates: Partial<Omit<Goal, "id" | "createdAt">>): Goal[] {
+export function updateGoal(
+  id: string,
+  updates: Partial<Omit<Goal, "id" | "createdAt">>
+): Goal[] {
   const goals = getGoals().map((g) =>
     g.id === id
       ? {
           ...g,
           ...updates,
-          progress: updates.milestones ? calcProgress(updates.milestones) : g.progress,
+          progress: updates.milestones
+            ? calcProgress(updates.milestones)
+            : g.progress,
           updatedAt: new Date().toISOString(),
         }
       : g
@@ -115,10 +154,19 @@ export function toggleMilestone(goalId: string, milestoneId: string): Goal[] {
     if (g.id !== goalId) return g;
     const milestones = g.milestones.map((m) =>
       m.id === milestoneId
-        ? { ...m, completed: !m.completed, completedAt: !m.completed ? new Date().toISOString() : undefined }
+        ? {
+            ...m,
+            completed: !m.completed,
+            completedAt: !m.completed ? new Date().toISOString() : undefined,
+          }
         : m
     );
-    return { ...g, milestones, progress: calcProgress(milestones), updatedAt: new Date().toISOString() };
+    return {
+      ...g,
+      milestones,
+      progress: calcProgress(milestones),
+      updatedAt: new Date().toISOString(),
+    };
   });
   saveGoals(goals);
   return goals;

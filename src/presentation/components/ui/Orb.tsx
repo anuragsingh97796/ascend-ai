@@ -24,7 +24,8 @@ export const Orb = () => {
           right: 0,
           bottom: 0,
           borderRadius: "50%",
-          background: "radial-gradient(circle, var(--accent) 0%, transparent 70%)",
+          background:
+            "radial-gradient(circle, var(--accent) 0%, transparent 70%)",
           filter: "blur(20px)",
         }}
       />
@@ -46,12 +47,13 @@ export const Orb = () => {
           right: "15%",
           bottom: "15%",
           borderRadius: "50%",
-          background: "conic-gradient(from 0deg, var(--aurora-1), var(--aurora-2), var(--aurora-3), var(--aurora-1))",
+          background:
+            "conic-gradient(from 0deg, var(--aurora-1), var(--aurora-2), var(--aurora-3), var(--aurora-1))",
           boxShadow: "var(--shadow-glow)",
           border: "2px solid rgba(255, 255, 255, 0.2)",
         }}
       />
-      
+
       {/* Surface Reflection */}
       <div
         style={{
@@ -60,7 +62,8 @@ export const Orb = () => {
           left: "20%",
           width: "30%",
           height: "30%",
-          background: "radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%)",
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%)",
           borderRadius: "50%",
           filter: "blur(4px)",
           opacity: 0.6,

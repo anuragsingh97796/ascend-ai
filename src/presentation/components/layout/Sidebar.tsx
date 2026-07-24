@@ -4,13 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import {
-  LayoutDashboard,
-  Target,
-  Flame,
-  BookOpen,
-  Brain,
-} from "lucide-react";
+import { LayoutDashboard, Target, Flame, BookOpen, Brain } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -37,7 +31,9 @@ export function Sidebar() {
       }}
     >
       <div style={{ padding: "0 12px" }}>
-        <h2 className="text-gradient" style={{ fontSize: 20, fontWeight: 700 }}>Ascend AI</h2>
+        <h2 className="text-gradient" style={{ fontSize: 20, fontWeight: 700 }}>
+          Ascend AI
+        </h2>
       </div>
 
       <nav style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -78,7 +74,10 @@ export function Sidebar() {
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
-              <Icon size={18} style={{ color: isActive ? "var(--accent)" : "inherit" }} />
+              <Icon
+                size={18}
+                style={{ color: isActive ? "var(--accent)" : "inherit" }}
+              />
               {label}
             </Link>
           );

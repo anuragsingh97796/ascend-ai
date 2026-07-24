@@ -38,12 +38,18 @@ export function CircularProgress({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const normalizedValue = Math.min(100, Math.max(0, value));
-  const strokeDashoffset = circumference - (normalizedValue / 100) * circumference;
+  const strokeDashoffset =
+    circumference - (normalizedValue / 100) * circumference;
 
   const color = colorMap[variant] || colorMap.brand;
 
   return (
-    <div className={cn("relative inline-flex flex-col items-center justify-center", className)}>
+    <div
+      className={cn(
+        "relative inline-flex flex-col items-center justify-center",
+        className
+      )}
+    >
       <svg width={size} height={size} className="rotate-[-90deg]">
         <circle
           cx={size / 2}
@@ -75,7 +81,11 @@ export function CircularProgress({
           <span className="text-xl font-bold tracking-tight text-text-primary">
             {Math.round(normalizedValue)}%
           </span>
-          {label && <span className="text-[10px] font-medium text-text-tertiary uppercase tracking-wider">{label}</span>}
+          {label && (
+            <span className="text-[10px] font-medium text-text-tertiary uppercase tracking-wider">
+              {label}
+            </span>
+          )}
         </div>
       )}
     </div>

@@ -8,22 +8,26 @@ const SEED: JournalEntry[] = [
   {
     id: "j1",
     title: "Starting fresh",
-    content: "Today I set up my first goal in Ascend AI. Feeling motivated and clear about what I want to achieve this quarter. The morning meditation helped a lot.",
+    content:
+      "Today I set up my first goal in Ascend AI. Feeling motivated and clear about what I want to achieve this quarter. The morning meditation helped a lot.",
     mood: "😄",
     wordCount: 29,
     tags: ["motivation", "goals"],
-    aiInsight: "Your positive momentum is clear. Consider anchoring this clarity with a 5-minute evening review habit.",
+    aiInsight:
+      "Your positive momentum is clear. Consider anchoring this clarity with a 5-minute evening review habit.",
     createdAt: new Date(Date.now() - 2 * 24 * 3600000).toISOString(),
     updatedAt: new Date(Date.now() - 2 * 24 * 3600000).toISOString(),
   },
   {
     id: "j2",
     title: "Tough day but kept going",
-    content: "Work was overwhelming but I still did my evening run. Small wins matter. I struggled with the no-social-media habit today but I will try again tomorrow.",
+    content:
+      "Work was overwhelming but I still did my evening run. Small wins matter. I struggled with the no-social-media habit today but I will try again tomorrow.",
     mood: "😐",
     wordCount: 29,
     tags: ["resilience", "habits"],
-    aiInsight: "You ran even on a hard day — that's high-agency behavior. Acknowledge that.",
+    aiInsight:
+      "You ran even on a hard day — that's high-agency behavior. Acknowledge that.",
     createdAt: new Date(Date.now() - 1 * 24 * 3600000).toISOString(),
     updatedAt: new Date(Date.now() - 1 * 24 * 3600000).toISOString(),
   },
@@ -34,14 +38,18 @@ export function getEntries(): JournalEntry[] {
   try {
     const raw = localStorage.getItem(KEY);
     return raw ? JSON.parse(raw) : SEED;
-  } catch { return SEED; }
+  } catch {
+    return SEED;
+  }
 }
 
 function saveEntries(entries: JournalEntry[]): void {
   localStorage.setItem(KEY, JSON.stringify(entries));
 }
 
-export function addEntry(entry: Omit<JournalEntry, "id" | "createdAt" | "updatedAt" | "wordCount">): JournalEntry[] {
+export function addEntry(
+  entry: Omit<JournalEntry, "id" | "createdAt" | "updatedAt" | "wordCount">
+): JournalEntry[] {
   const entries = getEntries();
   const wordCount = entry.content.trim().split(/\s+/).filter(Boolean).length;
   const newEntry: JournalEntry = {
@@ -56,7 +64,10 @@ export function addEntry(entry: Omit<JournalEntry, "id" | "createdAt" | "updated
   return updated;
 }
 
-export function updateEntry(id: string, updates: Partial<Pick<JournalEntry, "title" | "content" | "mood" | "tags">>): JournalEntry[] {
+export function updateEntry(
+  id: string,
+  updates: Partial<Pick<JournalEntry, "title" | "content" | "mood" | "tags">>
+): JournalEntry[] {
   const entries = getEntries().map((e) => {
     if (e.id !== id) return e;
     const content = updates.content ?? e.content;

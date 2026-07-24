@@ -6,7 +6,8 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export type HabitFrequency = "daily" | "weekdays" | "weekends" | "weekly";
-export type HabitColor = "brand" | "cyan" | "emerald" | "amber" | "rose" | "indigo";
+export type HabitColor =
+  "brand" | "cyan" | "emerald" | "amber" | "rose" | "indigo";
 
 export interface Habit {
   id: string;
@@ -27,8 +28,16 @@ interface HabitsState {
 }
 
 interface HabitsActions {
-  addHabit: (habit: Omit<Habit, "id" | "currentStreak" | "longestStreak" | "completedDates" | "createdAt">) => void;
-  updateHabit: (id: string, updates: Partial<Omit<Habit, "id" | "createdAt">>) => void;
+  addHabit: (
+    habit: Omit<
+      Habit,
+      "id" | "currentStreak" | "longestStreak" | "completedDates" | "createdAt"
+    >
+  ) => void;
+  updateHabit: (
+    id: string,
+    updates: Partial<Omit<Habit, "id" | "createdAt">>
+  ) => void;
   deleteHabit: (id: string) => void;
   checkIn: (id: string) => void;
   undoCheckIn: (id: string) => void;
@@ -96,7 +105,9 @@ export const useHabitsStore = create<HabitsStore>()(
         })),
       updateHabit: (id, updates) =>
         set((state) => ({
-          habits: state.habits.map((h) => (h.id === id ? { ...h, ...updates } : h)),
+          habits: state.habits.map((h) =>
+            h.id === id ? { ...h, ...updates } : h
+          ),
         })),
       deleteHabit: (id) =>
         set((state) => ({ habits: state.habits.filter((h) => h.id !== id) })),
@@ -122,7 +133,11 @@ export const useHabitsStore = create<HabitsStore>()(
             if (h.id !== id) return h;
             const today = toDateStr();
             const completedDates = h.completedDates.filter((d) => d !== today);
-            return { ...h, completedDates, currentStreak: calcStreak(completedDates) };
+            return {
+              ...h,
+              completedDates,
+              currentStreak: calcStreak(completedDates),
+            };
           }),
         })),
     }),

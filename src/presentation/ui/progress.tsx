@@ -10,7 +10,18 @@ import { cn } from "@/lib/utils";
 export interface ProgressProps {
   value?: number;
   max?: number;
-  variant?: "brand" | "success" | "warning" | "error" | "cyan" | "indigo" | "emerald" | "amber" | "rose" | "default" | "gradient";
+  variant?:
+    | "brand"
+    | "success"
+    | "warning"
+    | "error"
+    | "cyan"
+    | "indigo"
+    | "emerald"
+    | "amber"
+    | "rose"
+    | "default"
+    | "gradient";
   size?: "xs" | "sm" | "md" | "lg";
   label?: string;
   showValue?: boolean;
@@ -57,8 +68,16 @@ export function Progress({
     <div className="flex flex-col gap-1.5 w-full">
       {(label || showValue) && (
         <div className="flex items-center justify-between">
-          {label && <span className="text-sm font-medium text-text-primary">{label}</span>}
-          {showValue && <span className="text-xs font-medium text-text-secondary">{Math.round(percentage)}%</span>}
+          {label && (
+            <span className="text-sm font-medium text-text-primary">
+              {label}
+            </span>
+          )}
+          {showValue && (
+            <span className="text-xs font-medium text-text-secondary">
+              {Math.round(percentage)}%
+            </span>
+          )}
         </div>
       )}
 
@@ -67,13 +86,21 @@ export function Progress({
         aria-valuenow={value}
         aria-valuemin={0}
         aria-valuemax={max}
-        className={cn("w-full overflow-hidden rounded-full bg-surface-hover", sizeMap[size] || "h-2", className)}
+        className={cn(
+          "w-full overflow-hidden rounded-full bg-surface-hover",
+          sizeMap[size] || "h-2",
+          className
+        )}
       >
         <motion.div
           initial={animate ? { width: 0 } : { width: `${percentage}%` }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.8, ease: [0, 0, 0.2, 1] }}
-          className={cn("h-full rounded-full", variantFill[variant] || "bg-brand-500", indicatorClassName)}
+          className={cn(
+            "h-full rounded-full",
+            variantFill[variant] || "bg-brand-500",
+            indicatorClassName
+          )}
         />
       </div>
     </div>

@@ -28,7 +28,8 @@ export function Topbar() {
               width: 32,
               height: 32,
               borderRadius: "50%",
-              background: "linear-gradient(135deg, var(--aurora-1), var(--aurora-2))",
+              background:
+                "linear-gradient(135deg, var(--aurora-1), var(--aurora-2))",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -40,7 +41,9 @@ export function Topbar() {
           </div>
           <span style={{ fontSize: 14, fontWeight: 500 }}>{user?.name}</span>
         </div>
-        <div style={{ width: 1, height: 24, background: "var(--glass-border)" }} />
+        <div
+          style={{ width: 1, height: 24, background: "var(--glass-border)" }}
+        />
         <button
           onClick={signOut}
           style={{

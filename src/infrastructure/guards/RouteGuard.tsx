@@ -10,7 +10,10 @@ interface RouteGuardProps {
   redirectIfAuthenticated?: boolean;
 }
 
-export function RouteGuard({ children, redirectIfAuthenticated = false }: RouteGuardProps) {
+export function RouteGuard({
+  children,
+  redirectIfAuthenticated = false,
+}: RouteGuardProps) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 

@@ -11,8 +11,10 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-border hover:border-border/80 focus-visible:border-brand-500/50 focus-visible:ring-brand-500/20",
-        error: "border-error/50 bg-error/5 focus-visible:border-error focus-visible:ring-error/20",
+        default:
+          "border-border hover:border-border/80 focus-visible:border-brand-500/50 focus-visible:ring-brand-500/20",
+        error:
+          "border-error/50 bg-error/5 focus-visible:border-error focus-visible:ring-error/20",
       },
     },
     defaultVariants: {
@@ -22,7 +24,8 @@ const inputVariants = cva(
 );
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends
+    React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputVariants> {
   label?: string;
   error?: string;
@@ -34,7 +37,18 @@ export interface InputProps
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, variant, label, error, helperText, leftAdornment, rightAdornment, wrapperClassName, id, ...props },
+    {
+      className,
+      variant,
+      label,
+      error,
+      helperText,
+      leftAdornment,
+      rightAdornment,
+      wrapperClassName,
+      id,
+      ...props
+    },
     ref
   ) => {
     const generatedId = React.useId();
@@ -45,7 +59,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn("flex flex-col gap-1.5 w-full", wrapperClassName)}>
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-text-primary ml-0.5">
+          <label
+            htmlFor={inputId}
+            className="text-sm font-medium text-text-primary ml-0.5"
+          >
             {label}
           </label>
         )}
@@ -65,7 +82,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
             ref={ref}
             aria-invalid={isError}
-            aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined}
+            aria-describedby={
+              error
+                ? `${inputId}-error`
+                : helperText
+                  ? `${inputId}-helper`
+                  : undefined
+            }
             {...props}
           />
           {rightAdornment && (
@@ -75,12 +98,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
         {error && (
-          <p id={`${inputId}-error`} className="text-xs text-error font-medium ml-0.5 animate-in slide-in-from-top-1 fade-in-50 duration-200">
+          <p
+            id={`${inputId}-error`}
+            className="text-xs text-error font-medium ml-0.5 animate-in slide-in-from-top-1 fade-in-50 duration-200"
+          >
             {error}
           </p>
         )}
         {helperText && !error && (
-          <p id={`${inputId}-helper`} className="text-xs text-text-tertiary ml-0.5">
+          <p
+            id={`${inputId}-helper`}
+            className="text-xs text-text-tertiary ml-0.5"
+          >
             {helperText}
           </p>
         )}
