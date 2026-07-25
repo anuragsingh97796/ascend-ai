@@ -26,11 +26,18 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
-    const stored = getStoredAuth();
-    return stored?.isAuthenticated ? stored.user : null;
-  });
-  const [isLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  React.useEffect(() => {
+    Promise.resolve().then(() => {
+      const stored = getStoredAuth();
+      if (stored?.isAuthenticated) {
+        setUser(stored.user);
+      }
+      setIsLoading(false);
+    });
+  }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const u = await mockSignIn(email, password);

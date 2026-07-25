@@ -1,23 +1,17 @@
 /**
  * Ascend AI — Auth Store (Zustand)
- *
- * Simulates authentication for Milestone 2.
- * Persists session state to localStorage.
+ * Integrated with Spring Boot JWT Backend API
  */
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatarUrl?: string;
-  joinedAt: string;
-}
+import { mockSignIn, mockSignUp, clearStoredAuth } from "@/application/services/authService";
+import type { User } from "@/domain/entities/User";
 
 interface AuthState {
   user: User | null;
+  token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -32,55 +26,60 @@ interface AuthActions {
 
 type AuthStore = AuthState & AuthActions;
 
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
       user: null,
+      token: null,
+      refreshToken: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
 
       signIn: async (email, pass) => {
         set({ isLoading: true, error: null });
-        await delay(1200); // Simulate network
-        if (pass === "wrong") {
-          set({ isLoading: false, error: "Invalid email or password." });
-          throw new Error("Auth failed");
+        try {
+          const user = await mockSignIn(email, pass);
+          const token = typeof window !== "undefined" ? localStorage.getItem("ascend_token") : null;
+          const refreshToken = typeof window !== "undefined" ? localStorage.getItem("ascend_refresh_token") : null;
+          set({
+            user,
+            token,
+            refreshToken,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Authentication failed";
+          set({ isLoading: false, error: msg });
+          throw err;
         }
-        set({
-          user: {
-            id: `usr_${Date.now()}`,
-            name: email.split("@")[0].replace(/[^a-zA-Z0-9]/g, " "),
-            email,
-            joinedAt: new Date().toISOString(),
-          },
-          isAuthenticated: true,
-          isLoading: false,
-        });
       },
 
-      signUp: async (name, email) => {
+      signUp: async (name, email, pass) => {
         set({ isLoading: true, error: null });
-        await delay(1500); // Simulate network
-        if (email.includes("taken")) {
-          set({ isLoading: false, error: "Email is already in use." });
-          throw new Error("Auth failed");
+        try {
+          const user = await mockSignUp(name, email, pass);
+          const token = typeof window !== "undefined" ? localStorage.getItem("ascend_token") : null;
+          const refreshToken = typeof window !== "undefined" ? localStorage.getItem("ascend_refresh_token") : null;
+          set({
+            user,
+            token,
+            refreshToken,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Registration failed";
+          set({ isLoading: false, error: msg });
+          throw err;
         }
-        set({
-          user: {
-            id: `usr_${Date.now()}`,
-            name,
-            email,
-            joinedAt: new Date().toISOString(),
-          },
-          isAuthenticated: true,
-          isLoading: false,
-        });
       },
 
-      signOut: () => set({ user: null, isAuthenticated: false }),
+      signOut: () => {
+        clearStoredAuth();
+        set({ user: null, token: null, refreshToken: null, isAuthenticated: false });
+      },
       clearError: () => set({ error: null }),
     }),
     {
@@ -90,6 +89,8 @@ export const useAuthStore = create<AuthStore>()(
       ),
       partialize: (state) => ({
         user: state.user,
+        token: state.token,
+        refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
     }

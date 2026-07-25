@@ -11,13 +11,16 @@ export function Topbar() {
     <header
       style={{
         height: "var(--header-height)",
-        borderBottom: "1px solid var(--glass-border)",
-        background: "rgba(0,0,0,0.4)",
-        backdropFilter: "blur(24px)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+        background: "linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
+        backdropFilter: "blur(32px) saturate(180%)",
+        WebkitBackdropFilter: "blur(32px) saturate(180%)",
+        boxShadow: "inset 0 -1px 0 rgba(255, 255, 255, 0.08)",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 24px",
+        zIndex: 10,
       }}
     >
       <div style={{ flex: 1 }} />
