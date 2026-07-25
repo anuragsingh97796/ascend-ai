@@ -9,7 +9,10 @@ const AUTH_KEY = "ascend:auth";
 const TOKEN_KEY = "ascend_token";
 const REFRESH_TOKEN_KEY = "ascend_refresh_token";
 
-export function getStoredAuth(): { user: User; isAuthenticated: boolean } | null {
+export function getStoredAuth(): {
+  user: User;
+  isAuthenticated: boolean;
+} | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(AUTH_KEY);
@@ -21,7 +24,10 @@ export function getStoredAuth(): { user: User; isAuthenticated: boolean } | null
 
 export function setStoredAuth(user: User): void {
   if (typeof window !== "undefined") {
-    localStorage.setItem(AUTH_KEY, JSON.stringify({ user, isAuthenticated: true }));
+    localStorage.setItem(
+      AUTH_KEY,
+      JSON.stringify({ user, isAuthenticated: true })
+    );
   }
 }
 
@@ -33,7 +39,10 @@ export function clearStoredAuth(): void {
   }
 }
 
-export async function mockSignIn(email: string, password: string): Promise<User> {
+export async function mockSignIn(
+  email: string,
+  password: string
+): Promise<User> {
   try {
     const response = await apiClient.post("/auth/login", { email, password });
     if (response.data?.success && response.data?.data) {
@@ -56,7 +65,10 @@ export async function mockSignIn(email: string, password: string): Promise<User>
   } catch (err: unknown) {
     // Fallback to local storage auth if backend server is unreachable
     if (email && password.length >= 6) {
-      const name = email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+      const name = email
+        .split("@")[0]
+        .replace(/[._]/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
       const user: User = {
         id: `u_${Date.now()}`,
         name,
@@ -67,14 +79,23 @@ export async function mockSignIn(email: string, password: string): Promise<User>
       setStoredAuth(user);
       return user;
     }
-    const message = err instanceof Error ? err.message : "Authentication failed.";
+    const message =
+      err instanceof Error ? err.message : "Authentication failed.";
     throw new Error(message);
   }
 }
 
-export async function mockSignUp(name: string, email: string, password: string): Promise<User> {
+export async function mockSignUp(
+  name: string,
+  email: string,
+  password: string
+): Promise<User> {
   try {
-    const response = await apiClient.post("/auth/register", { name, email, password });
+    const response = await apiClient.post("/auth/register", {
+      name,
+      email,
+      password,
+    });
     if (response.data?.success) {
       return mockSignIn(email, password);
     }

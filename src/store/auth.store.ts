@@ -5,7 +5,11 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { mockSignIn, mockSignUp, clearStoredAuth } from "@/application/services/authService";
+import {
+  mockSignIn,
+  mockSignUp,
+  clearStoredAuth,
+} from "@/application/services/authService";
 import type { User } from "@/domain/entities/User";
 
 interface AuthState {
@@ -40,8 +44,14 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
         try {
           const user = await mockSignIn(email, pass);
-          const token = typeof window !== "undefined" ? localStorage.getItem("ascend_token") : null;
-          const refreshToken = typeof window !== "undefined" ? localStorage.getItem("ascend_refresh_token") : null;
+          const token =
+            typeof window !== "undefined"
+              ? localStorage.getItem("ascend_token")
+              : null;
+          const refreshToken =
+            typeof window !== "undefined"
+              ? localStorage.getItem("ascend_refresh_token")
+              : null;
           set({
             user,
             token,
@@ -50,7 +60,8 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false,
           });
         } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Authentication failed";
+          const msg =
+            err instanceof Error ? err.message : "Authentication failed";
           set({ isLoading: false, error: msg });
           throw err;
         }
@@ -60,8 +71,14 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
         try {
           const user = await mockSignUp(name, email, pass);
-          const token = typeof window !== "undefined" ? localStorage.getItem("ascend_token") : null;
-          const refreshToken = typeof window !== "undefined" ? localStorage.getItem("ascend_refresh_token") : null;
+          const token =
+            typeof window !== "undefined"
+              ? localStorage.getItem("ascend_token")
+              : null;
+          const refreshToken =
+            typeof window !== "undefined"
+              ? localStorage.getItem("ascend_refresh_token")
+              : null;
           set({
             user,
             token,
@@ -70,7 +87,8 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false,
           });
         } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Registration failed";
+          const msg =
+            err instanceof Error ? err.message : "Registration failed";
           set({ isLoading: false, error: msg });
           throw err;
         }
@@ -78,7 +96,12 @@ export const useAuthStore = create<AuthStore>()(
 
       signOut: () => {
         clearStoredAuth();
-        set({ user: null, token: null, refreshToken: null, isAuthenticated: false });
+        set({
+          user: null,
+          token: null,
+          refreshToken: null,
+          isAuthenticated: false,
+        });
       },
       clearError: () => set({ error: null }),
     }),

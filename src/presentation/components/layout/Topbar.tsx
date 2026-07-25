@@ -12,7 +12,8 @@ export function Topbar() {
       style={{
         height: "var(--header-height)",
         borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-        background: "linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
+        background:
+          "linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
         backdropFilter: "blur(32px) saturate(180%)",
         WebkitBackdropFilter: "blur(32px) saturate(180%)",
         boxShadow: "inset 0 -1px 0 rgba(255, 255, 255, 0.08)",

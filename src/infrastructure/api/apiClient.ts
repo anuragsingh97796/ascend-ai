@@ -37,7 +37,9 @@ apiClient.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem("ascend_refresh_token");
         if (refreshToken) {
-          const res = await axios.post(`${API_URL}/auth/refresh`, { refreshToken });
+          const res = await axios.post(`${API_URL}/auth/refresh`, {
+            refreshToken,
+          });
           if (res.data?.success && res.data?.data?.accessToken) {
             const newToken = res.data.data.accessToken;
             localStorage.setItem("ascend_token", newToken);

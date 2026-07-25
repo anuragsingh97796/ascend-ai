@@ -22,10 +22,12 @@ export function Sidebar() {
       style={{
         width: "var(--sidebar-width)",
         borderRight: "1px solid rgba(255, 255, 255, 0.08)",
-        background: "linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
+        background:
+          "linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
         backdropFilter: "blur(32px) saturate(180%)",
         WebkitBackdropFilter: "blur(32px) saturate(180%)",
-        boxShadow: "inset -1px 0 0 rgba(255, 255, 255, 0.08), 10px 0 30px rgba(0,0,0,0.5)",
+        boxShadow:
+          "inset -1px 0 0 rgba(255, 255, 255, 0.08), 10px 0 30px rgba(0,0,0,0.5)",
         padding: "24px 16px",
         display: "flex",
         flexDirection: "column",
