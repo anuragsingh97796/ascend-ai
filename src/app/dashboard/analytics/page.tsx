@@ -3,20 +3,21 @@
 import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
-import { getGoals } from "@/application/services/goalsService";
-import {
-  getHabits,
-  isCompletedToday,
-} from "@/application/services/habitsService";
+import { useGoalsStore } from "@/store/goals.store";
+import { useHabitsStore } from "@/store/habits.store";
+import { isCompletedToday } from "@/application/services/habitsService";
 import { getEntries } from "@/application/services/journalService";
-import type { Goal } from "@/domain/entities/Goal";
-import type { Habit } from "@/domain/entities/Habit";
 import type { JournalEntry } from "@/domain/entities/Journal";
 
 export default function AnalyticsPage() {
-  const [goals] = useState<Goal[]>(() => getGoals());
-  const [habits] = useState<Habit[]>(() => getHabits());
+  const { goals, fetchGoals } = useGoalsStore();
+  const { habits, fetchHabits } = useHabitsStore();
   const [entries] = useState<JournalEntry[]>(() => getEntries());
+
+  React.useEffect(() => {
+    fetchGoals();
+    fetchHabits();
+  }, [fetchGoals, fetchHabits]);
 
   const activeGoals = goals.filter((g) => g.status === "active");
   const avgProgress = activeGoals.length

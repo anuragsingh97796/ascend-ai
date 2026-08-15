@@ -1,19 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
-import { getGoals } from "@/application/services/goalsService";
-import {
-  getHabits,
-  toggleHabitToday,
-  isCompletedToday,
-} from "@/application/services/habitsService";
+import { useGoalsStore } from "@/store/goals.store";
+import { useHabitsStore } from "@/store/habits.store";
+import { isCompletedToday } from "@/application/services/habitsService";
 import { getEntries } from "@/application/services/journalService";
 import { getStoredAuth } from "@/application/services/authService";
-import type { Goal } from "@/domain/entities/Goal";
-import type { Habit } from "@/domain/entities/Habit";
 import type { JournalEntry } from "@/domain/entities/Journal";
 import {
   Target,
@@ -54,14 +49,19 @@ export default function DashboardOverviewPage() {
     const auth = getStoredAuth();
     return auth?.user || null;
   });
-  const [goals] = useState<Goal[]>(() => getGoals());
-  const [habits, setHabits] = useState<Habit[]>(() => getHabits());
+  
+  const { goals, fetchGoals } = useGoalsStore();
+  const { habits, fetchHabits, toggleHabit } = useHabitsStore();
   const [entries] = useState<JournalEntry[]>(() => getEntries());
   const [quoteIndex, setQuoteIndex] = useState(0);
 
+  useEffect(() => {
+    fetchGoals();
+    fetchHabits();
+  }, [fetchGoals, fetchHabits]);
+
   const handleHabitToggle = (habitId: string) => {
-    const updated = toggleHabitToday(habitId);
-    setHabits(updated);
+    toggleHabit(habitId);
   };
 
   const activeGoals = goals.filter((g) => g.status === "active");

@@ -39,7 +39,7 @@ export function clearStoredAuth(): void {
   }
 }
 
-export async function mockSignIn(
+export async function signIn(
   email: string,
   password: string
 ): Promise<User> {
@@ -62,30 +62,14 @@ export async function mockSignIn(
       return user;
     }
     throw new Error(response.data?.message || "Invalid credentials.");
-  } catch (err: unknown) {
-    // Fallback to local storage auth if backend server is unreachable
-    if (email && password.length >= 6) {
-      const name = email
-        .split("@")[0]
-        .replace(/[._]/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-      const user: User = {
-        id: `u_${Date.now()}`,
-        name,
-        email,
-        avatarInitials: name.slice(0, 2).toUpperCase(),
-        joinedAt: new Date().toISOString(),
-      };
-      setStoredAuth(user);
-      return user;
-    }
-    const message =
-      err instanceof Error ? err.message : "Authentication failed.";
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.message || error.message || "Authentication failed.";
     throw new Error(message);
   }
 }
 
-export async function mockSignUp(
+export async function signUp(
   name: string,
   email: string,
   password: string
@@ -97,22 +81,12 @@ export async function mockSignUp(
       password,
     });
     if (response.data?.success) {
-      return mockSignIn(email, password);
+      return signIn(email, password);
     }
     throw new Error(response.data?.message || "Registration failed.");
-  } catch (err: unknown) {
-    if (name && email && password.length >= 6) {
-      const user: User = {
-        id: `u_${Date.now()}`,
-        name,
-        email,
-        avatarInitials: name.slice(0, 2).toUpperCase(),
-        joinedAt: new Date().toISOString(),
-      };
-      setStoredAuth(user);
-      return user;
-    }
-    const message = err instanceof Error ? err.message : "Registration failed.";
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.message || error.message || "Registration failed.";
     throw new Error(message);
   }
 }

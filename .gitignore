@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local Maven installation and build output
+backend/maven/
+backend/maven.zip
+backend/target/

@@ -6,8 +6,8 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import {
-  mockSignIn,
-  mockSignUp,
+  signIn,
+  signUp,
   clearStoredAuth,
 } from "@/application/services/authService";
 import type { User } from "@/domain/entities/User";
@@ -43,7 +43,7 @@ export const useAuthStore = create<AuthStore>()(
       signIn: async (email, pass) => {
         set({ isLoading: true, error: null });
         try {
-          const user = await mockSignIn(email, pass);
+          const user = await signIn(email, pass);
           const token =
             typeof window !== "undefined"
               ? localStorage.getItem("ascend_token")
@@ -70,7 +70,7 @@ export const useAuthStore = create<AuthStore>()(
       signUp: async (name, email, pass) => {
         set({ isLoading: true, error: null });
         try {
-          const user = await mockSignUp(name, email, pass);
+          const user = await signUp(name, email, pass);
           const token =
             typeof window !== "undefined"
               ? localStorage.getItem("ascend_token")

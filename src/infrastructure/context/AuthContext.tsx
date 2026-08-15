@@ -5,8 +5,8 @@ import type { User } from "@/domain/entities/User";
 import {
   getStoredAuth,
   clearStoredAuth,
-  mockSignIn,
-  mockSignUp,
+  signIn as realSignIn,
+  signUp as realSignUp,
 } from "@/application/services/authService";
 
 // ─── Context Shape ────────────────────────────────────────────────────────────
@@ -40,13 +40,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const u = await mockSignIn(email, password);
+    const u = await realSignIn(email, password);
     setUser(u);
   }, []);
 
   const signUp = useCallback(
     async (name: string, email: string, password: string) => {
-      const u = await mockSignUp(name, email, password);
+      const u = await realSignUp(name, email, password);
       setUser(u);
     },
     []

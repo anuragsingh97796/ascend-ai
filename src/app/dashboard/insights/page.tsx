@@ -3,11 +3,9 @@
 import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
-import { getGoals } from "@/application/services/goalsService";
-import { getHabits } from "@/application/services/habitsService";
+import { useGoalsStore } from "@/store/goals.store";
+import { useHabitsStore } from "@/store/habits.store";
 import { getEntries } from "@/application/services/journalService";
-import type { Goal } from "@/domain/entities/Goal";
-import type { Habit } from "@/domain/entities/Habit";
 import type { JournalEntry } from "@/domain/entities/Journal";
 import {
   TrendingUp,
@@ -21,9 +19,14 @@ import {
 } from "lucide-react";
 
 export default function InsightsPage() {
-  const [goals] = useState<Goal[]>(() => getGoals());
-  const [habits] = useState<Habit[]>(() => getHabits());
+  const { goals, fetchGoals } = useGoalsStore();
+  const { habits, fetchHabits } = useHabitsStore();
   const [entries] = useState<JournalEntry[]>(() => getEntries());
+
+  React.useEffect(() => {
+    fetchGoals();
+    fetchHabits();
+  }, [fetchGoals, fetchHabits]);
 
   const completedGoals = goals.filter((g) => g.status === "completed");
   const longestStreak = Math.max(0, ...habits.map((h) => h.currentStreak || 0));

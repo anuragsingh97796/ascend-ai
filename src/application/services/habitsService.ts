@@ -1,132 +1,57 @@
-// Application Service: Habits (localStorage)
-
 import type {
   Habit,
   HabitColor,
   HabitFrequency,
 } from "@/domain/entities/Habit";
-
-const KEY = "ascend:habits";
+import { apiClient } from "@/infrastructure/api/apiClient";
 
 const today = () => new Date().toISOString().split("T")[0];
 
-const SEED: Habit[] = [
-  {
-    id: "h1",
-    name: "Morning Meditation",
-    description: "10 minutes of mindfulness",
-    icon: "🧘",
-    color: "purple",
-    frequency: "daily",
-    currentStreak: 12,
-    longestStreak: 21,
-    completedDates: Array.from({ length: 12 }, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      return d.toISOString().split("T")[0];
-    }),
-    createdAt: "2026-06-15T00:00:00Z",
-  },
-  {
-    id: "h2",
-    name: "Read 30 Pages",
-    description: "Non-fiction reading habit",
-    icon: "📚",
-    color: "cyan",
-    frequency: "daily",
-    currentStreak: 5,
-    longestStreak: 14,
-    completedDates: Array.from({ length: 5 }, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      return d.toISOString().split("T")[0];
-    }),
-    createdAt: "2026-07-01T00:00:00Z",
-  },
-  {
-    id: "h3",
-    name: "Evening Run",
-    description: "3km minimum",
-    icon: "🏃",
-    color: "emerald",
-    frequency: "weekdays",
-    currentStreak: 3,
-    longestStreak: 8,
-    completedDates: Array.from({ length: 3 }, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      return d.toISOString().split("T")[0];
-    }),
-    createdAt: "2026-07-05T00:00:00Z",
-  },
-  {
-    id: "h4",
-    name: "No Social Media",
-    description: "Until 6pm each day",
-    icon: "📵",
-    color: "amber",
-    frequency: "daily",
-    currentStreak: 0,
-    longestStreak: 5,
-    completedDates: [],
-    createdAt: "2026-07-10T00:00:00Z",
-  },
-];
-
-export function getHabits(): Habit[] {
-  if (typeof window === "undefined") return SEED;
-  try {
-    const raw = localStorage.getItem(KEY);
-    return raw ? JSON.parse(raw) : SEED;
-  } catch {
-    return SEED;
-  }
+export async function getHabits(): Promise<Habit[]> {
+  const res = await apiClient.get("/habits");
+  return res.data?.data || [];
 }
 
-function saveHabits(habits: Habit[]): void {
-  localStorage.setItem(KEY, JSON.stringify(habits));
-}
-
-export function addHabit(
+export async function addHabit(
   habit: Omit<
     Habit,
     "id" | "createdAt" | "currentStreak" | "longestStreak" | "completedDates"
   >
-): Habit[] {
-  const habits = getHabits();
-  const newHabit: Habit = {
+): Promise<Habit> {
+  const payload = {
     ...habit,
-    id: `h_${Date.now()}`,
     currentStreak: 0,
     longestStreak: 0,
     completedDates: [],
-    createdAt: new Date().toISOString(),
   };
-  const updated = [newHabit, ...habits];
-  saveHabits(updated);
-  return updated;
+  const res = await apiClient.post("/habits", payload);
+  return res.data?.data;
 }
 
-export function deleteHabit(id: string): Habit[] {
-  const habits = getHabits().filter((h) => h.id !== id);
-  saveHabits(habits);
-  return habits;
+export async function deleteHabit(id: string): Promise<string> {
+  await apiClient.delete(`/habits/${id}`);
+  return id;
 }
 
-export function toggleHabitToday(id: string): Habit[] {
+export async function toggleHabitToday(habit: Habit): Promise<Habit> {
   const todayStr = today();
-  const habits = getHabits().map((h) => {
-    if (h.id !== id) return h;
-    const alreadyDone = h.completedDates.includes(todayStr);
-    const completedDates = alreadyDone
-      ? h.completedDates.filter((d) => d !== todayStr)
-      : [...h.completedDates, todayStr];
-    const currentStreak = calcStreak(completedDates);
-    const longestStreak = Math.max(h.longestStreak, currentStreak);
-    return { ...h, completedDates, currentStreak, longestStreak };
-  });
-  saveHabits(habits);
-  return habits;
+  const alreadyDone = habit.completedDates.includes(todayStr);
+  
+  const completedDates = alreadyDone
+    ? habit.completedDates.filter((d) => d !== todayStr)
+    : [...habit.completedDates, todayStr];
+    
+  const currentStreak = calcStreak(completedDates);
+  const longestStreak = Math.max(habit.longestStreak, currentStreak);
+  
+  const updates = {
+    completedDates,
+    currentStreak,
+    longestStreak,
+  };
+  
+  const res = await apiClient.put(`/habits/${habit.id}`, updates);
+  return res.data?.data;
 }
 
 function calcStreak(dates: string[]): number {
@@ -144,7 +69,7 @@ function calcStreak(dates: string[]): number {
 }
 
 export function isCompletedToday(habit: Habit): boolean {
-  return habit.completedDates.includes(today());
+  return habit.completedDates?.includes(today()) || false;
 }
 
 export type { HabitColor, HabitFrequency };
