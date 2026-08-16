@@ -5,7 +5,7 @@ import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
 import { useGoalsStore } from "@/store/goals.store";
-import { CheckCircle2, Circle, Plus, Trash2} from "lucide-react";
+import { CheckCircle2, Circle, Plus, Trash2 } from "lucide-react";
 import {
   Modal,
   ModalContent,
@@ -27,9 +27,9 @@ export default function GoalsPage() {
   const [category, setCategory] = useState<GoalCategory>("health");
   const [status, setStatus] = useState<GoalStatus>("active");
   const [targetDate, setTargetDate] = useState("");
-  const [milestones, setMilestones] = useState<{ id: string; title: string; completed: boolean }[]>([
-    { id: "1", title: "", completed: false },
-  ]);
+  const [milestones, setMilestones] = useState<
+    { id: string; title: string; completed: boolean }[]
+  >([{ id: "1", title: "", completed: false }]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -227,10 +227,13 @@ export default function GoalsPage() {
         ))}
       </div>
 
-      <Modal open={isCreateOpen} onOpenChange={(open) => {
-        if (!open) resetForm();
-        setIsCreateOpen(open);
-      }}>
+      <Modal
+        open={isCreateOpen}
+        onOpenChange={(open) => {
+          if (!open) resetForm();
+          setIsCreateOpen(open);
+        }}
+      >
         <ModalContent className="max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border-[#333]">
           <ModalHeader>
             <ModalTitle className="text-white">Create New Goal</ModalTitle>
@@ -257,7 +260,9 @@ export default function GoalsPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-200">Description</label>
+              <label className="text-sm font-medium text-gray-200">
+                Description
+              </label>
               <Textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -268,7 +273,9 @@ export default function GoalsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-200">Category</label>
+                <label className="text-sm font-medium text-gray-200">
+                  Category
+                </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value as GoalCategory)}
@@ -283,7 +290,9 @@ export default function GoalsPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-200">Status</label>
+                <label className="text-sm font-medium text-gray-200">
+                  Status
+                </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as GoalStatus)}
@@ -297,7 +306,9 @@ export default function GoalsPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-200">Target Date (Optional)</label>
+              <label className="text-sm font-medium text-gray-200">
+                Target Date (Optional)
+              </label>
               <Input
                 type="date"
                 value={targetDate}
@@ -308,7 +319,9 @@ export default function GoalsPage() {
 
             <div className="space-y-3 pt-2">
               <div className="flex justify-between items-center">
-                <label className="text-sm font-medium text-gray-200">Milestones</label>
+                <label className="text-sm font-medium text-gray-200">
+                  Milestones
+                </label>
                 <button
                   type="button"
                   onClick={handleAddMilestone}
@@ -317,7 +330,7 @@ export default function GoalsPage() {
                   <Plus size={14} /> Add Milestone
                 </button>
               </div>
-              
+
               <div className="space-y-2">
                 {milestones.map((milestone, index) => (
                   <div key={milestone.id} className="flex items-center gap-2">
@@ -326,7 +339,9 @@ export default function GoalsPage() {
                     </div>
                     <Input
                       value={milestone.title}
-                      onChange={(e) => handleMilestoneChange(milestone.id, e.target.value)}
+                      onChange={(e) =>
+                        handleMilestoneChange(milestone.id, e.target.value)
+                      }
                       placeholder="Milestone description"
                       className="bg-[#111] border-[#333] text-white flex-1"
                     />

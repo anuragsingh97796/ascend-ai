@@ -43,9 +43,7 @@ const ModalContent = React.forwardRef<
     >
       {children}
 
-      <DialogPrimitive.Close
-        className="absolute right-4 top-4 rounded-full p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white focus:outline-none"
-      >
+      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white focus:outline-none">
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
@@ -60,10 +58,7 @@ const ModalHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn(
-      "flex flex-col space-y-1.5 text-left",
-      className
-    )}
+    className={cn("flex flex-col space-y-1.5 text-left", className)}
     {...props}
   />
 );

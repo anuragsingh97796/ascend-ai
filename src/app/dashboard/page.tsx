@@ -49,7 +49,7 @@ export default function DashboardOverviewPage() {
     const auth = getStoredAuth();
     return auth?.user || null;
   });
-  
+
   const { goals, fetchGoals } = useGoalsStore();
   const { habits, fetchHabits, toggleHabit } = useHabitsStore();
   const [entries] = useState<JournalEntry[]>(() => getEntries());

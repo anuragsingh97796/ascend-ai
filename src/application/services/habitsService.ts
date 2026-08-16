@@ -36,20 +36,20 @@ export async function deleteHabit(id: string): Promise<string> {
 export async function toggleHabitToday(habit: Habit): Promise<Habit> {
   const todayStr = today();
   const alreadyDone = habit.completedDates.includes(todayStr);
-  
+
   const completedDates = alreadyDone
     ? habit.completedDates.filter((d) => d !== todayStr)
     : [...habit.completedDates, todayStr];
-    
+
   const currentStreak = calcStreak(completedDates);
   const longestStreak = Math.max(habit.longestStreak, currentStreak);
-  
+
   const updates = {
     completedDates,
     currentStreak,
     longestStreak,
   };
-  
+
   const res = await apiClient.put(`/habits/${habit.id}`, updates);
   return res.data?.data;
 }

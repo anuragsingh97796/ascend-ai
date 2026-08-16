@@ -45,7 +45,10 @@ export const useHabitsStore = create<HabitsStore>()((set, get) => ({
       const habits = await getHabits();
       set({ habits, isLoading: false });
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : "Failed to fetch habits", isLoading: false });
+      set({
+        error: err instanceof Error ? err.message : "Failed to fetch habits",
+        isLoading: false,
+      });
     }
   },
 
@@ -58,7 +61,10 @@ export const useHabitsStore = create<HabitsStore>()((set, get) => ({
         isLoading: false,
       }));
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : "Failed to add habit", isLoading: false });
+      set({
+        error: err instanceof Error ? err.message : "Failed to add habit",
+        isLoading: false,
+      });
     }
   },
 
@@ -71,14 +77,17 @@ export const useHabitsStore = create<HabitsStore>()((set, get) => ({
         isLoading: false,
       }));
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : "Failed to delete habit", isLoading: false });
+      set({
+        error: err instanceof Error ? err.message : "Failed to delete habit",
+        isLoading: false,
+      });
     }
   },
 
   toggleHabit: async (id) => {
     const habit = get().habits.find((h) => h.id === id);
     if (!habit) return;
-    
+
     // Optimistic UI update could go here
     try {
       const updatedHabit = await toggleHabitToday(habit);

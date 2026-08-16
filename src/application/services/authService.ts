@@ -40,10 +40,7 @@ export function clearStoredAuth(): void {
   }
 }
 
-export async function signIn(
-  email: string,
-  password: string
-): Promise<User> {
+export async function signIn(email: string, password: string): Promise<User> {
   try {
     const response = await apiClient.post("/auth/login", { email, password });
     if (response.data?.success && response.data?.data) {
@@ -63,22 +60,20 @@ export async function signIn(
       return user;
     }
     throw new Error(response.data?.message || "Invalid credentials.");
- } catch (err: unknown) {
-  if (axios.isAxiosError(err)) {
-    const message =
-      err.response?.data?.message ||
-      err.message ||
-      "Authentication failed.";
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      const message =
+        err.response?.data?.message || err.message || "Authentication failed.";
 
-    throw new Error(message);
+      throw new Error(message);
+    }
+
+    if (err instanceof Error) {
+      throw new Error(err.message);
+    }
+
+    throw new Error("Authentication failed.");
   }
-
-  if (err instanceof Error) {
-    throw new Error(err.message);
-  }
-
-  throw new Error("Authentication failed.");
-}
 }
 
 export async function signUp(
@@ -97,19 +92,17 @@ export async function signUp(
     }
     throw new Error(response.data?.message || "Registration failed.");
   } catch (err: unknown) {
-  if (axios.isAxiosError(err)) {
-    const message =
-      err.response?.data?.message ||
-      err.message ||
-      "Registration failed.";
+    if (axios.isAxiosError(err)) {
+      const message =
+        err.response?.data?.message || err.message || "Registration failed.";
 
-    throw new Error(message);
+      throw new Error(message);
+    }
+
+    if (err instanceof Error) {
+      throw new Error(err.message);
+    }
+
+    throw new Error("Registration failed.");
   }
-
-  if (err instanceof Error) {
-    throw new Error(err.message);
-  }
-
-  throw new Error("Registration failed.");
-}
 }

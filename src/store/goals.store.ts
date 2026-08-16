@@ -47,7 +47,10 @@ export const useGoalsStore = create<GoalsStore>()((set, get) => ({
       const goals = await getGoals();
       set({ goals, isLoading: false });
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : "Failed to fetch goals", isLoading: false });
+      set({
+        error: err instanceof Error ? err.message : "Failed to fetch goals",
+        isLoading: false,
+      });
     }
   },
 
@@ -60,7 +63,10 @@ export const useGoalsStore = create<GoalsStore>()((set, get) => ({
         isLoading: false,
       }));
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : "Failed to add goal", isLoading: false });
+      set({
+        error: err instanceof Error ? err.message : "Failed to add goal",
+        isLoading: false,
+      });
     }
   },
 
@@ -73,7 +79,10 @@ export const useGoalsStore = create<GoalsStore>()((set, get) => ({
         isLoading: false,
       }));
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : "Failed to update goal", isLoading: false });
+      set({
+        error: err instanceof Error ? err.message : "Failed to update goal",
+        isLoading: false,
+      });
     }
   },
 
@@ -86,7 +95,10 @@ export const useGoalsStore = create<GoalsStore>()((set, get) => ({
         isLoading: false,
       }));
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : "Failed to delete goal", isLoading: false });
+      set({
+        error: err instanceof Error ? err.message : "Failed to delete goal",
+        isLoading: false,
+      });
     }
   },
 
