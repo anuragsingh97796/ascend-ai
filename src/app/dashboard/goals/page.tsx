@@ -5,7 +5,7 @@ import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
 import { useGoalsStore } from "@/store/goals.store";
-import { CheckCircle2, Circle, Plus, Trash2, X } from "lucide-react";
+import { CheckCircle2, Circle, Plus, Trash2} from "lucide-react";
 import {
   Modal,
   ModalContent,

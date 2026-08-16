@@ -4,6 +4,7 @@
 
 import type { User } from "@/domain/entities/User";
 import { apiClient } from "@/infrastructure/api/apiClient";
+import axios from "axios";
 
 const AUTH_KEY = "ascend:auth";
 const TOKEN_KEY = "ascend_token";
@@ -62,11 +63,22 @@ export async function signIn(
       return user;
     }
     throw new Error(response.data?.message || "Invalid credentials.");
-  } catch (err) {
-    const error = err as any;
-    const message = error.response?.data?.message || error.message || "Authentication failed.";
+ } catch (err: unknown) {
+  if (axios.isAxiosError(err)) {
+    const message =
+      err.response?.data?.message ||
+      err.message ||
+      "Authentication failed.";
+
     throw new Error(message);
   }
+
+  if (err instanceof Error) {
+    throw new Error(err.message);
+  }
+
+  throw new Error("Authentication failed.");
+}
 }
 
 export async function signUp(
@@ -84,9 +96,20 @@ export async function signUp(
       return signIn(email, password);
     }
     throw new Error(response.data?.message || "Registration failed.");
-  } catch (err) {
-    const error = err as any;
-    const message = error.response?.data?.message || error.message || "Registration failed.";
+  } catch (err: unknown) {
+  if (axios.isAxiosError(err)) {
+    const message =
+      err.response?.data?.message ||
+      err.message ||
+      "Registration failed.";
+
     throw new Error(message);
   }
+
+  if (err instanceof Error) {
+    throw new Error(err.message);
+  }
+
+  throw new Error("Registration failed.");
+}
 }
