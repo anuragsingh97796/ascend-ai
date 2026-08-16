@@ -1,5 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getHabits, addHabit, updateHabit, deleteHabit, toggleHabitToday } from "@/application/services/habitsService";
+import {
+  getHabits,
+  addHabit,
+  updateHabit,
+  deleteHabit,
+  toggleHabitToday,
+} from "@/application/services/habitsService";
 import type { Habit } from "@/domain/entities/Habit";
 
 export function useHabits() {
@@ -24,8 +30,13 @@ export function useUpdateHabit() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: Partial<Omit<Habit, "id" | "createdAt">> }) =>
-      updateHabit(id, updates), // Wait, does updateHabit exist in habitsService? I need to verify.
+    mutationFn: ({
+      id,
+      updates,
+    }: {
+      id: string;
+      updates: Partial<Omit<Habit, "id" | "createdAt">>;
+    }) => updateHabit(id, updates), // Wait, does updateHabit exist in habitsService? I need to verify.
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits"] });
     },

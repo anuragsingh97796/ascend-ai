@@ -1,10 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
-import { useGoals, useCreateGoal, useUpdateGoal } from "@/application/hooks/useGoalsHooks";
+import {
+  useGoals,
+  useCreateGoal,
+  useUpdateGoal,
+} from "@/application/hooks/useGoalsHooks";
 import { CheckCircle2, Circle, Plus, Trash2 } from "lucide-react";
 import {
   Modal,
@@ -149,7 +153,8 @@ export default function GoalsPage() {
         {isLoading && <div className="text-gray-400">Loading goals...</div>}
         {!isLoading && goals.length === 0 && (
           <div className="text-gray-400 col-span-full text-center py-12">
-            No goals yet. Create your first goal to start your transformation journey.
+            No goals yet. Create your first goal to start your transformation
+            journey.
           </div>
         )}
         {goals.map((goal, i) => (

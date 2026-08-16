@@ -137,7 +137,9 @@ function LoginForm() {
                 marginTop: 4,
               }}
             >
-              {loginMutation.isPending && <Loader2 size={16} className="animate-spin" />}
+              {loginMutation.isPending && (
+                <Loader2 size={16} className="animate-spin" />
+              )}
               {loginMutation.isPending ? "Signing in…" : "Sign in"}
             </motion.button>
           </form>

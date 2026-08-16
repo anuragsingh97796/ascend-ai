@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
 import { useJournalEntries } from "@/application/hooks/useJournalHooks";
-import type { JournalEntry } from "@/domain/entities/Journal";
 import { Sparkles, Calendar } from "lucide-react";
 
 export default function JournalPage() {
@@ -41,7 +40,9 @@ export default function JournalPage() {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {isLoading && <div className="text-gray-400">Loading journal entries...</div>}
+        {isLoading && (
+          <div className="text-gray-400">Loading journal entries...</div>
+        )}
         {!isLoading && entries.length === 0 && (
           <div className="text-gray-400 text-center py-12">
             No journal entries yet. Capture your first thought.

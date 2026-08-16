@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";

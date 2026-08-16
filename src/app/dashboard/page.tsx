@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
@@ -9,7 +9,6 @@ import { useHabits, useToggleHabit } from "@/application/hooks/useHabitsHooks";
 import { isCompletedToday } from "@/application/services/habitsService";
 import { useJournalEntries } from "@/application/hooks/useJournalHooks";
 import { getStoredAuth } from "@/application/services/authService";
-import type { JournalEntry } from "@/domain/entities/Journal";
 import {
   Target,
   Flame,

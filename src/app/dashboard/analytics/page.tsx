@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { useGoals } from "@/application/hooks/useGoalsHooks";
 import { useHabits } from "@/application/hooks/useHabitsHooks";
 import { isCompletedToday } from "@/application/services/habitsService";
 import { useJournalEntries } from "@/application/hooks/useJournalHooks";
-import type { JournalEntry } from "@/domain/entities/Journal";
 
 export default function AnalyticsPage() {
   const { data: goals = [] } = useGoals();

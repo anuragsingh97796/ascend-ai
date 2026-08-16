@@ -1,5 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getEntries, addEntry, updateEntry, deleteEntry } from "@/application/services/journalService";
+import {
+  getEntries,
+  addEntry,
+  updateEntry,
+  deleteEntry,
+} from "@/application/services/journalService";
 import type { JournalEntry } from "@/domain/entities/Journal";
 
 export function useJournalEntries() {
@@ -24,8 +29,15 @@ export function useUpdateJournalEntry() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: Partial<Pick<JournalEntry, "title" | "content" | "mood" | "tags">> }) =>
-      updateEntry(id, updates),
+    mutationFn: ({
+      id,
+      updates,
+    }: {
+      id: string;
+      updates: Partial<
+        Pick<JournalEntry, "title" | "content" | "mood" | "tags">
+      >;
+    }) => updateEntry(id, updates),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["journal"] });
     },
