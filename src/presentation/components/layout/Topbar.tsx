@@ -1,11 +1,15 @@
 "use client";
 
 import React from "react";
-import { useAuth } from "@/infrastructure/context/AuthContext";
+import {
+  useCurrentUser,
+  useLogoutMutation,
+} from "@/application/hooks/useAuthHooks";
 import { LogOut } from "lucide-react";
 
 export function Topbar() {
-  const { user, signOut } = useAuth();
+  const { data: user } = useCurrentUser();
+  const logoutMutation = useLogoutMutation();
 
   return (
     <header
@@ -49,7 +53,7 @@ export function Topbar() {
           style={{ width: 1, height: 24, background: "var(--glass-border)" }}
         />
         <button
-          onClick={signOut}
+          onClick={() => logoutMutation.mutate()}
           style={{
             background: "transparent",
             border: "none",

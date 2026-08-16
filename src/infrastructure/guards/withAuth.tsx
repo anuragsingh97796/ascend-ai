@@ -2,13 +2,14 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/infrastructure/context/AuthContext";
+import { useCurrentUser } from "@/application/hooks/useAuthHooks";
 
 export function withAuth<P extends object>(
   WrappedComponent: React.ComponentType<P>
 ) {
   return function WithAuth(props: P) {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { data: user, isLoading } = useCurrentUser();
+    const isAuthenticated = !!user;
     const router = useRouter();
 
     useEffect(() => {

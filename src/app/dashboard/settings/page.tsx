@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
-import { getStoredAuth } from "@/application/services/authService";
+import { useCurrentUser } from "@/application/hooks/useAuthHooks";
 import {
   User,
   Palette,
@@ -28,8 +28,7 @@ const SECTIONS = [
 type SectionId = (typeof SECTIONS)[number]["id"];
 
 export default function SettingsPage() {
-  const auth = getStoredAuth();
-  const user = auth?.user;
+  const { data: user } = useCurrentUser();
   const [activeTab, setActiveTab] = useState<SectionId>("profile");
   const [nameInput, setNameInput] = useState(user?.name || "");
 

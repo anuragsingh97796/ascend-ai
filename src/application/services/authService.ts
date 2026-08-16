@@ -6,37 +6,34 @@ import type { User } from "@/domain/entities/User";
 import { apiClient } from "@/infrastructure/api/apiClient";
 import axios from "axios";
 
-const AUTH_KEY = "ascend:auth";
 const TOKEN_KEY = "ascend_token";
 const REFRESH_TOKEN_KEY = "ascend_refresh_token";
 
-export function getStoredAuth(): {
-  user: User;
-  isAuthenticated: boolean;
-} | null {
-  if (typeof window === "undefined") return null;
+export async function getCurrentUser(): Promise<User> {
+  const response = await apiClient.get("/auth/me");
+  if (response.data?.success && response.data?.data) {
+    const data = response.data.data;
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      avatarInitials: data.avatarInitials || "AI",
+      joinedAt: data.joinedAt || new Date().toISOString(),
+    };
+  }
+  throw new Error("Failed to fetch user");
+}
+
+export async function logout(): Promise<void> {
   try {
-    const raw = localStorage.getItem(AUTH_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-export function setStoredAuth(user: User): void {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(
-      AUTH_KEY,
-      JSON.stringify({ user, isAuthenticated: true })
-    );
-  }
-}
-
-export function clearStoredAuth(): void {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem(AUTH_KEY);
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    await apiClient.post("/auth/logout");
+  } catch (error) {
+    console.error("Logout failed on backend", error);
+  } finally {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(REFRESH_TOKEN_KEY);
+    }
   }
 }
 
@@ -56,7 +53,6 @@ export async function signIn(email: string, password: string): Promise<User> {
         localStorage.setItem(TOKEN_KEY, data.token);
         localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
       }
-      setStoredAuth(user);
       return user;
     }
     throw new Error(response.data?.message || "Invalid credentials.");

@@ -4,12 +4,12 @@ import React, { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useAuth } from "@/infrastructure/context/AuthContext";
+import { useLoginMutation } from "@/application/hooks/useAuthHooks";
 import { RouteGuard } from "@/infrastructure/guards/RouteGuard";
 import { Loader2 } from "lucide-react";
 
 function LoginForm() {
-  const { signIn } = useAuth();
+  const loginMutation = useLoginMutation();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ function LoginForm() {
     setError("");
     setLoading(true);
     try {
-      await signIn(email, password);
+      await loginMutation.mutateAsync({ email, password });
       router.push("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong.");

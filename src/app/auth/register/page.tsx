@@ -4,12 +4,12 @@ import React, { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useAuth } from "@/infrastructure/context/AuthContext";
+import { useRegisterMutation } from "@/application/hooks/useAuthHooks";
 import { RouteGuard } from "@/infrastructure/guards/RouteGuard";
 import { Loader2 } from "lucide-react";
 
 function RegisterForm() {
-  const { signUp } = useAuth();
+  const registerMutation = useRegisterMutation();
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -23,7 +23,7 @@ function RegisterForm() {
     setError("");
     setLoading(true);
     try {
-      await signUp(name, email, password);
+      await registerMutation.mutateAsync({ name, email, password });
       router.push("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong.");

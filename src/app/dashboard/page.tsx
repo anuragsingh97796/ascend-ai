@@ -8,7 +8,7 @@ import { useGoals } from "@/application/hooks/useGoalsHooks";
 import { useHabits, useToggleHabit } from "@/application/hooks/useHabitsHooks";
 import { isCompletedToday } from "@/application/services/habitsService";
 import { useJournalEntries } from "@/application/hooks/useJournalHooks";
-import { getStoredAuth } from "@/application/services/authService";
+import { useCurrentUser } from "@/application/hooks/useAuthHooks";
 import {
   Target,
   Flame,
@@ -44,10 +44,7 @@ const DAILY_QUOTES = [
 ];
 
 export default function DashboardOverviewPage() {
-  const [user] = useState<{ name: string } | null>(() => {
-    const auth = getStoredAuth();
-    return auth?.user || null;
-  });
+  const { data: user } = useCurrentUser();
 
   const { data: goals = [] } = useGoals();
   const { data: habits = [] } = useHabits();
