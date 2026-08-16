@@ -33,6 +33,14 @@ export async function deleteHabit(id: string): Promise<string> {
   return id;
 }
 
+export async function updateHabit(
+  id: string,
+  updates: Partial<Omit<Habit, "id" | "createdAt">>
+): Promise<Habit> {
+  const res = await apiClient.put(`/habits/${id}`, updates);
+  return res.data?.data;
+}
+
 export async function toggleHabitToday(habit: Habit): Promise<Habit> {
   const todayStr = today();
   const alreadyDone = habit.completedDates.includes(todayStr);

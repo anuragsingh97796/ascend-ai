@@ -4,19 +4,18 @@ import React, { useEffect } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
-import { useHabitsStore } from "@/store/habits.store";
+import { useHabits, useToggleHabit } from "@/application/hooks/useHabitsHooks";
 import { isCompletedToday } from "@/application/services/habitsService";
 import { Check, Flame } from "lucide-react";
 
 export default function HabitsPage() {
-  const { habits, fetchHabits, toggleHabit } = useHabitsStore();
+  const { data: habits = [], isLoading } = useHabits();
+  const { mutateAsync: toggleHabit } = useToggleHabit();
 
-  useEffect(() => {
-    fetchHabits();
-  }, [fetchHabits]);
-
-  const handleCheckIn = (id: string) => {
-    toggleHabit(id);
+  const handleCheckIn = async (id: string) => {
+    const habit = habits.find((h) => h.id === id);
+    if (!habit) return;
+    await toggleHabit(habit);
   };
 
   return (
@@ -41,6 +40,12 @@ export default function HabitsPage() {
       </div>
 
       <div className="dashboard-grid">
+        {isLoading && <div className="text-gray-400">Loading habits...</div>}
+        {!isLoading && habits.length === 0 && (
+          <div className="text-gray-400 col-span-full text-center py-12">
+            No habits yet. Start tracking your daily routines.
+          </div>
+        )}
         {habits.map((habit, i) => {
           const completed = isCompletedToday(habit);
           return (

@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
-import { useGoalsStore } from "@/store/goals.store";
-import { useHabitsStore } from "@/store/habits.store";
+import { useGoals } from "@/application/hooks/useGoalsHooks";
+import { useHabits, useToggleHabit } from "@/application/hooks/useHabitsHooks";
 import { isCompletedToday } from "@/application/services/habitsService";
-import { getEntries } from "@/application/services/journalService";
+import { useJournalEntries } from "@/application/hooks/useJournalHooks";
 import { getStoredAuth } from "@/application/services/authService";
 import type { JournalEntry } from "@/domain/entities/Journal";
 import {
@@ -50,18 +50,15 @@ export default function DashboardOverviewPage() {
     return auth?.user || null;
   });
 
-  const { goals, fetchGoals } = useGoalsStore();
-  const { habits, fetchHabits, toggleHabit } = useHabitsStore();
-  const [entries] = useState<JournalEntry[]>(() => getEntries());
+  const { data: goals = [] } = useGoals();
+  const { data: habits = [] } = useHabits();
+  const { mutateAsync: toggleHabit } = useToggleHabit();
+  const { data: entries = [] } = useJournalEntries();
   const [quoteIndex, setQuoteIndex] = useState(0);
 
-  useEffect(() => {
-    fetchGoals();
-    fetchHabits();
-  }, [fetchGoals, fetchHabits]);
-
-  const handleHabitToggle = (habitId: string) => {
-    toggleHabit(habitId);
+  const handleHabitToggle = async (habitId: string) => {
+    const habit = habits.find((h) => h.id === habitId);
+    if (habit) await toggleHabit(habit);
   };
 
   const activeGoals = goals.filter((g) => g.status === "active");

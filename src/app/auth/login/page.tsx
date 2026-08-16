@@ -4,30 +4,26 @@ import React, { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useAuth } from "@/infrastructure/context/AuthContext";
+import { useLoginMutation } from "@/application/hooks/useAuthHooks";
 import { RouteGuard } from "@/infrastructure/guards/RouteGuard";
 import { Loader2 } from "lucide-react";
 
 function LoginForm() {
-  const { signIn } = useAuth();
+  const loginMutation = useLoginMutation();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
     try {
-      await signIn(email, password);
+      await loginMutation.mutateAsync({ email, password });
       router.push("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -119,7 +115,7 @@ function LoginForm() {
 
             <motion.button
               type="submit"
-              disabled={loading}
+              disabled={loginMutation.isPending}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
               style={{
@@ -127,13 +123,13 @@ function LoginForm() {
                 padding: "12px",
                 borderRadius: "var(--radius-sm)",
                 border: "none",
-                background: loading
+                background: loginMutation.isPending
                   ? "rgba(94,106,210,0.4)"
                   : "linear-gradient(135deg, var(--aurora-1), var(--accent))",
                 color: "#fff",
                 fontWeight: 600,
                 fontSize: 14,
-                cursor: loading ? "not-allowed" : "pointer",
+                cursor: loginMutation.isPending ? "not-allowed" : "pointer",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -141,8 +137,8 @@ function LoginForm() {
                 marginTop: 4,
               }}
             >
-              {loading && <Loader2 size={16} className="animate-spin" />}
-              {loading ? "Signing in…" : "Sign in"}
+              {loginMutation.isPending && <Loader2 size={16} className="animate-spin" />}
+              {loginMutation.isPending ? "Signing in…" : "Sign in"}
             </motion.button>
           </form>
 

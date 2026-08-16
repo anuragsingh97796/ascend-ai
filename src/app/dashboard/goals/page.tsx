@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
-import { useGoalsStore } from "@/store/goals.store";
+import { useGoals, useCreateGoal, useUpdateGoal } from "@/application/hooks/useGoalsHooks";
 import { CheckCircle2, Circle, Plus, Trash2 } from "lucide-react";
 import {
   Modal,
@@ -18,7 +18,9 @@ import { Textarea } from "@/presentation/ui/textarea";
 import type { GoalCategory, GoalStatus } from "@/domain/entities/Goal";
 
 export default function GoalsPage() {
-  const { goals, fetchGoals, toggleMilestone, addGoal } = useGoalsStore();
+  const { data: goals = [], isLoading } = useGoals();
+  const { mutateAsync: addGoal } = useCreateGoal();
+  const { mutateAsync: updateGoal } = useUpdateGoal();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   // Form State
@@ -32,12 +34,19 @@ export default function GoalsPage() {
   >([{ id: "1", title: "", completed: false }]);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchGoals();
-  }, [fetchGoals]);
-
   const handleToggle = (goalId: string, milestoneId: string) => {
-    toggleMilestone(goalId, milestoneId);
+    const goal = goals.find((g) => g.id === goalId);
+    if (!goal) return;
+    const updatedMilestones = goal.milestones.map((m) =>
+      m.id === milestoneId
+        ? {
+            ...m,
+            completed: !m.completed,
+            completedAt: !m.completed ? new Date().toISOString() : undefined,
+          }
+        : m
+    );
+    updateGoal({ id: goalId, updates: { milestones: updatedMilestones } });
   };
 
   const handleAddMilestone = () => {
@@ -137,6 +146,12 @@ export default function GoalsPage() {
       </div>
 
       <div className="dashboard-grid">
+        {isLoading && <div className="text-gray-400">Loading goals...</div>}
+        {!isLoading && goals.length === 0 && (
+          <div className="text-gray-400 col-span-full text-center py-12">
+            No goals yet. Create your first goal to start your transformation journey.
+          </div>
+        )}
         {goals.map((goal, i) => (
           <GlassCard key={goal.id} delay={i * 0.1}>
             <div style={{ marginBottom: 16 }}>

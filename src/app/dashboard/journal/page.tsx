@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Button } from "@/presentation/components/ui/Button";
-import { getEntries } from "@/application/services/journalService";
+import { useJournalEntries } from "@/application/hooks/useJournalHooks";
 import type { JournalEntry } from "@/domain/entities/Journal";
 import { Sparkles, Calendar } from "lucide-react";
 
 export default function JournalPage() {
-  const [entries] = useState<JournalEntry[]>(() => getEntries());
+  const { data: entries = [], isLoading } = useJournalEntries();
 
   const formatDate = (isoString: string) => {
     return new Date(isoString).toLocaleDateString("en-US", {
@@ -41,6 +41,12 @@ export default function JournalPage() {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        {isLoading && <div className="text-gray-400">Loading journal entries...</div>}
+        {!isLoading && entries.length === 0 && (
+          <div className="text-gray-400 text-center py-12">
+            No journal entries yet. Capture your first thought.
+          </div>
+        )}
         {entries.map((entry, i) => (
           <GlassCard key={entry.id} delay={i * 0.1}>
             <div
