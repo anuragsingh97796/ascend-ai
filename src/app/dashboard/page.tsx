@@ -248,8 +248,7 @@ export default function DashboardOverviewPage() {
                   borderRadius: 999,
                 }}
               >
-                {habitsCompletedToday}/{totalHabitsToday} Done
-              </span>
+                {habitsCompletedToday}/{totalHabitsToday} Done</span><Link href="/dashboard/habits" style={{ fontSize: 13, color: "var(--brand-400)", textDecoration: "none", fontWeight: 600, marginLeft: 16 }}>View All &rarr;</Link>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -545,3 +544,4 @@ export default function DashboardOverviewPage() {
     </PageTransition>
   );
 }
+

@@ -19,8 +19,11 @@ export function useCreateGoal() {
 
   return useMutation({
     mutationFn: addGoal,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goals"] });
+    onSuccess: (newGoal) => {
+      queryClient.setQueryData<Goal[]>(["goals"], (old) =>
+        old ? [newGoal, ...old] : [newGoal]
+      );
+      void queryClient.invalidateQueries({ queryKey: ["goals"] });
     },
   });
 }
@@ -36,8 +39,25 @@ export function useUpdateGoal() {
       id: string;
       updates: Partial<Omit<Goal, "id" | "createdAt">>;
     }) => updateGoal(id, updates),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goals"] });
+    onMutate: async ({ id, updates }) => {
+      await queryClient.cancelQueries({ queryKey: ["goals"] });
+      const previousGoals = queryClient.getQueryData<Goal[]>(["goals"]);
+      queryClient.setQueryData<Goal[]>(["goals"], (old) =>
+        old
+          ? old.map((g) =>
+              g.id === id ? { ...g, ...updates, updatedAt: new Date().toISOString() } : g
+            )
+          : old
+      );
+      return { previousGoals };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousGoals) {
+        queryClient.setQueryData(["goals"], context.previousGoals);
+      }
+    },
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ["goals"] });
     },
   });
 }
@@ -47,8 +67,21 @@ export function useDeleteGoal() {
 
   return useMutation({
     mutationFn: deleteGoal,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goals"] });
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["goals"] });
+      const previousGoals = queryClient.getQueryData<Goal[]>(["goals"]);
+      queryClient.setQueryData<Goal[]>(["goals"], (old) =>
+        old ? old.filter((g) => g.id !== id) : old
+      );
+      return { previousGoals };
+    },
+    onError: (_err, _id, context) => {
+      if (context?.previousGoals) {
+        queryClient.setQueryData(["goals"], context.previousGoals);
+      }
+    },
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ["goals"] });
     },
   });
 }
