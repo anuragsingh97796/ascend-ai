@@ -32,7 +32,6 @@ export interface Goal {
   updatedAt: string;
 }
 
-
 export type GoalPriority = "low" | "medium" | "high";
 
 export interface CreateGoalPayload {

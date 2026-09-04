@@ -45,7 +45,9 @@ export function useUpdateGoal() {
       queryClient.setQueryData<Goal[]>(["goals"], (old) =>
         old
           ? old.map((g) =>
-              g.id === id ? { ...g, ...updates, updatedAt: new Date().toISOString() } : g
+              g.id === id
+                ? { ...g, ...updates, updatedAt: new Date().toISOString() }
+                : g
             )
           : old
       );

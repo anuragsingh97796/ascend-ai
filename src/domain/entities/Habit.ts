@@ -20,7 +20,6 @@ export interface Habit {
   createdAt: string;
 }
 
-
 export type HabitStatus = "active" | "paused" | "archived";
 
 export interface HabitStats {

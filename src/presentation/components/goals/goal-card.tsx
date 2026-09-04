@@ -68,7 +68,8 @@ export function GoalCard({
     return () => document.removeEventListener("mousedown", handler);
   }, [menuOpen]);
 
-  const priority = priorityConfig[goal.priority || "medium"] ?? priorityConfig.medium;
+  const priority =
+    priorityConfig[goal.priority || "medium"] ?? priorityConfig.medium;
   const status = statusConfig[goal.status] ?? statusConfig.active;
 
   return (
@@ -182,4 +183,3 @@ export function GoalCard({
     </Card>
   );
 }
-

@@ -67,16 +67,16 @@ export default function GoalsPage() {
   }, [goals]);
 
   const handleCreate = (payload: CreateGoalPayload | UpdateGoalPayload) => {
-  createGoal.mutate(
-    {
-      ...(payload as CreateGoalPayload),
-      milestones: [],
-    },
-    {
-      onSuccess: () => setCreateOpen(false),
-    }
-  );
-};
+    createGoal.mutate(
+      {
+        ...(payload as CreateGoalPayload),
+        milestones: [],
+      },
+      {
+        onSuccess: () => setCreateOpen(false),
+      }
+    );
+  };
 
   const handleUpdate = (payload: CreateGoalPayload | UpdateGoalPayload) => {
     if (!editGoal) return;
@@ -274,4 +274,3 @@ function ErrorState({ message }: { message: string }) {
     </div>
   );
 }
-

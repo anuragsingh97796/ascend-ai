@@ -5,7 +5,10 @@
 "use client";
 
 import * as React from "react";
-import { useCurrentUser, useLogoutMutation } from "@/application/hooks/useAuthHooks";
+import {
+  useCurrentUser,
+  useLogoutMutation,
+} from "@/application/hooks/useAuthHooks";
 import { Bell, Search } from "lucide-react";
 import { Button } from "@/presentation/ui/button";
 

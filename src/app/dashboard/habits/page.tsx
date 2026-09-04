@@ -72,12 +72,12 @@ export default function HabitsPage() {
   // Aggregate stats
   const activeHabits = habits?.filter((h) => h.status === "active") ?? [];
   const completedToday = allStats?.filter((s) => s.completedToday).length ?? 0;
- const bestStreak =
-  allStats?.reduce((max, s) => Math.max(max, s.currentStreak), 0) ?? 0;
+  const bestStreak =
+    allStats?.reduce((max, s) => Math.max(max, s.currentStreak), 0) ?? 0;
   const avgRate =
     allStats && allStats.length > 0
       ? Math.round(
-         allStats.reduce((sum, s) => sum + s.completionRate, 0) /
+          allStats.reduce((sum, s) => sum + s.completionRate, 0) /
             allStats.length
         )
       : 0;
@@ -329,8 +329,3 @@ function ErrorState({ message }: { message: string }) {
     </div>
   );
 }
-
-
-
-
-

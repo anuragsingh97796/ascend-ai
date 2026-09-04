@@ -46,7 +46,9 @@ export function useUpdateHabit() {
       queryClient.setQueryData<Habit[]>(["habits"], (old) =>
         old
           ? old.map((h) =>
-              h.id === id ? { ...h, ...updates, updatedAt: new Date().toISOString() } : h
+              h.id === id
+                ? { ...h, ...updates, updatedAt: new Date().toISOString() }
+                : h
             )
           : old
       );
@@ -105,7 +107,7 @@ export function useToggleHabit() {
           const newDates = alreadyDone
             ? h.completedDates.filter((d) => d !== todayStr)
             : [...h.completedDates, todayStr];
-          
+
           return {
             ...h,
             completedDates: newDates,
@@ -135,15 +137,18 @@ export function useUncompleteHabit() {
 export function useAllHabitStats() {
   const { data: habits } = useHabits();
   return {
-    data: habits?.map(h => ({
-      habitId: h.id,
-      currentStreak: h.currentStreak,
-      longestStreak: h.longestStreak,
-      totalCompletions: h.completedDates.length,
-      completionRate: 100,
-      completedDates: h.completedDates,
-      completedToday: h.completedDates.includes(new Date().toISOString().split("T")[0])
-    })) || [],
-    isLoading: false
+    data:
+      habits?.map((h) => ({
+        habitId: h.id,
+        currentStreak: h.currentStreak,
+        longestStreak: h.longestStreak,
+        totalCompletions: h.completedDates.length,
+        completionRate: 100,
+        completedDates: h.completedDates,
+        completedToday: h.completedDates.includes(
+          new Date().toISOString().split("T")[0]
+        ),
+      })) || [],
+    isLoading: false,
   };
 }
