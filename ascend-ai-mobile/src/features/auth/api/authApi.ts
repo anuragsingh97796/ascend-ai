@@ -1,4 +1,4 @@
-import { apiClient } from '@shared/services/apiClient';
+﻿import { apiClient } from '@shared/services/apiClient';
 import { API_ENDPOINTS } from '@core/constants/api';
 import { AuthResponse, LoginPayload, RegisterPayload } from '../domain/auth.types';
 import { ApiResponse, User } from '@shared/types/api.types';
@@ -10,27 +10,35 @@ export const authApi = {
       payload,
     );
     if (!response.data.success || !response.data.data) {
-      throw new Error(response.data.error || 'Login failed');
+      throw new Error(response.data.error || response.data.message || 'Login failed');
     }
     return response.data.data;
   },
 
   register: async (payload: RegisterPayload): Promise<AuthResponse> => {
-    const response = await apiClient.post<ApiResponse<AuthResponse>>(
+    const response = await apiClient.post<ApiResponse<any>>(
       API_ENDPOINTS.AUTH_REGISTER,
       payload,
     );
-    if (!response.data.success || !response.data.data) {
-      throw new Error(response.data.error || 'Registration failed');
+    if (!response.data.success) {
+      throw new Error(response.data.error || response.data.message || 'Registration failed');
     }
-    return response.data.data;
+    // After registration, authenticate immediately to obtain JWT session
+    return authApi.login({ email: payload.email, password: payload.password });
   },
 
   getProfile: async (): Promise<User> => {
-    const response = await apiClient.get<ApiResponse<User>>(API_ENDPOINTS.USER_ME);
+    const response = await apiClient.get<ApiResponse<any>>(API_ENDPOINTS.USER_ME);
     if (!response.data.success || !response.data.data) {
-      throw new Error(response.data.error || 'Failed to fetch profile');
+      throw new Error(response.data.error || response.data.message || 'Failed to fetch profile');
     }
-    return response.data.data;
+    const d = response.data.data;
+    return {
+      id: d.id,
+      name: d.name,
+      email: d.email || d.username || '',
+      avatarInitials: d.avatarInitials || (d.name ? d.name.substring(0, 2).toUpperCase() : 'AI'),
+      joinedAt: d.joinedAt || new Date().toISOString(),
+    };
   },
 };

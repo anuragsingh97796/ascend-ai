@@ -1,4 +1,4 @@
-import { apiClient } from '@shared/services/apiClient';
+﻿import { apiClient } from '@shared/services/apiClient';
 import { API_ENDPOINTS } from '@core/constants/api';
 import { Habit, CreateHabitPayload, UpdateHabitPayload } from '../domain/habit.types';
 import { ApiResponse } from '@shared/types/api.types';
@@ -37,16 +37,27 @@ export const habitApi = {
   },
 
   checkIn: async (id: string): Promise<Habit> => {
-    const response = await apiClient.post<ApiResponse<Habit>>(API_ENDPOINTS.HABIT_CHECKIN(id));
-    if (!response.data.success || !response.data.data)
-      throw new Error(response.data.error || 'Check-in failed');
-    return response.data.data;
+    const current = await habitApi.getHabit(id);
+    const today = new Date().toISOString().split('T')[0];
+    const completedDates = current.completedDates?.includes(today)
+      ? current.completedDates
+      : [...(current.completedDates || []), today];
+    const streak = completedDates.length;
+    return habitApi.updateHabit(id, {
+      completedDates,
+      currentStreak: streak,
+      longestStreak: Math.max(current.longestStreak || 0, streak),
+    });
   },
 
   undoCheckIn: async (id: string): Promise<Habit> => {
-    const response = await apiClient.delete<ApiResponse<Habit>>(API_ENDPOINTS.HABIT_CHECKIN(id));
-    if (!response.data.success || !response.data.data)
-      throw new Error(response.data.error || 'Undo check-in failed');
-    return response.data.data;
+    const current = await habitApi.getHabit(id);
+    const today = new Date().toISOString().split('T')[0];
+    const completedDates = (current.completedDates || []).filter((d) => d !== today);
+    return habitApi.updateHabit(id, {
+      completedDates,
+      currentStreak: completedDates.length,
+      longestStreak: current.longestStreak || 0,
+    });
   },
 };

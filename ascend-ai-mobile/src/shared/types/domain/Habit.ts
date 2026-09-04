@@ -1,4 +1,4 @@
-// Domain Entity: Habit
+﻿// Domain Entity: Habit
 
 export type HabitFrequency = 'daily' | 'weekdays' | 'weekends' | 'weekly';
 export type HabitColor = 'purple' | 'cyan' | 'emerald' | 'amber' | 'rose' | 'indigo';
@@ -48,4 +48,7 @@ export interface UpdateHabitPayload {
   color?: HabitColor;
   frequency?: HabitFrequency;
   status?: HabitStatus;
+  completedDates?: string[];
+  currentStreak?: number;
+  longestStreak?: number;
 }

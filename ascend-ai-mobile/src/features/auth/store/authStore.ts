@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { AuthState, LoginPayload, RegisterPayload } from '../domain/auth.types';
 import { authApi } from '../api/authApi';
 import { User } from '@shared/types/api.types';
@@ -17,33 +17,32 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   token: null,
   isAuthenticated: false,
-  isLoading: true, // starts loading to check token
+  isLoading: true,
   error: null,
 
   login: async (payload: LoginPayload) => {
     set({ isLoading: true, error: null });
     try {
-      // --- TEMPORARY MOCK FOR UI VERIFICATION ---
-      // We are skipping the backend API call since the server is offline.
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await authApi.login(payload);
+      const jwtToken = response.token || response.accessToken || '';
+      storage.set(STORAGE_KEYS.AUTH_TOKEN, jwtToken);
 
       const user: User = {
-        id: '1',
-        avatarInitials: 'DU',
-        name: 'Demo User',
-        email: payload.email,
+        id: response.id || response.userId || '',
+        name: response.name,
+        email: response.email,
+        avatarInitials:
+          response.avatarInitials ||
+          (response.name ? response.name.substring(0, 2).toUpperCase() : 'AI'),
         joinedAt: new Date().toISOString(),
       };
 
-      storage.set(STORAGE_KEYS.AUTH_TOKEN, 'mock-jwt-token-123');
-
       set({
         user,
-        token: 'mock-jwt-token-123',
+        token: jwtToken,
         isAuthenticated: true,
         isLoading: false,
       });
-      // ------------------------------------------
     } catch (error: any) {
       set({ error: error.message || 'Login failed', isLoading: false });
       throw error;
@@ -54,19 +53,22 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await authApi.register(payload);
-      storage.set(STORAGE_KEYS.AUTH_TOKEN, response.accessToken);
+      const jwtToken = response.token || response.accessToken || '';
+      storage.set(STORAGE_KEYS.AUTH_TOKEN, jwtToken);
 
       const user: User = {
-        id: response.userId,
+        id: response.id || response.userId || '',
         name: response.name,
         email: response.email,
         joinedAt: new Date().toISOString(),
-        avatarInitials: response.name.substring(0, 2).toUpperCase(),
+        avatarInitials:
+          response.avatarInitials ||
+          (response.name ? response.name.substring(0, 2).toUpperCase() : 'AI'),
       };
 
       set({
         user,
-        token: response.accessToken,
+        token: jwtToken,
         isAuthenticated: true,
         isLoading: false,
       });
@@ -94,19 +96,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
 
     try {
-      // --- TEMPORARY MOCK FOR UI VERIFICATION ---
-      // Validate token by fetching profile
-      // const user = await authApi.getProfile();
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const user: User = {
-        id: '1',
-        avatarInitials: 'DU',
-        name: 'Demo User',
-        email: 'demo@ascendai.com',
-        joinedAt: new Date().toISOString(),
-      };
-      // ------------------------------------------
-
+      const user = await authApi.getProfile();
       set({
         user,
         token,

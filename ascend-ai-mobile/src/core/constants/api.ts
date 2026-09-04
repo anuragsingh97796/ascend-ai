@@ -1,8 +1,13 @@
+﻿import { Platform } from 'react-native';
+
 /**
  * All API base URLs and endpoint paths.
- * Base URL is sourced from environment variables.
+ * Base URL is sourced from environment variables or platform default.
  */
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? 'http://10.0.2.2:8080';
+export const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_BASE_URL ??
+  (Platform.OS === 'android' ? 'http://10.0.2.2:8080' : 'http://localhost:8080');
+
 export const API_TIMEOUT_MS = 15_000;
 
 export const API_ENDPOINTS = {
@@ -11,7 +16,7 @@ export const API_ENDPOINTS = {
   AUTH_REGISTER: '/api/auth/register',
 
   // User
-  USER_ME: '/api/users/me',
+  USER_ME: '/api/auth/me',
 
   // Goals
   GOALS_LIST: '/api/goals',
@@ -24,7 +29,7 @@ export const API_ENDPOINTS = {
 
   // Journal
   JOURNAL_LIST: '/api/journal',
-  JOURNAL_DETAIL: (_id: string) => '/api/journal',
+  JOURNAL_DETAIL: (id: string) => `/api/journal/${id}`,
 
   // AI (future)
   AI_CHAT: '/api/ai/chat',
