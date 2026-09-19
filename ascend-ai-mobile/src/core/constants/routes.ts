@@ -1,4 +1,4 @@
-﻿export const ROUTES = {
+export const ROUTES = {
   // Root Stacks
   AUTH_STACK: 'AuthStack',
   APP_STACK: 'AppStack',
@@ -13,8 +13,10 @@
   PROGRESS: 'Progress',
   JOURNAL: 'Journal',
   PROFILE: 'Profile',
+  COACH: 'Coach',
 } as const;
 
 export type Route = (typeof ROUTES)[keyof typeof ROUTES];
 
 export default ROUTES;
+

@@ -7,6 +7,8 @@ import { GoalsScreen } from '@features/goals/screens/GoalsScreen';
 import { HabitsScreen } from '@features/habits/screens/HabitsScreen';
 import { JournalScreen } from '@features/journal/screens/JournalScreen';
 import { ProfileScreen } from '@features/profile/screens/ProfileScreen';
+import { CoachScreen } from '@features/coach/screens/CoachScreen';
+import { MessageSquare } from 'lucide-react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -66,6 +68,15 @@ export const AppNavigator = () => {
           tabBarLabel: 'Profile',
         }}
       />
+          <Tab.Screen
+        name={ROUTES.COACH}
+        component={CoachScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <MessageSquare color={color} size={size} />,
+          tabBarLabel: 'Coach',
+        }}
+      />
     </Tab.Navigator>
   );
 };
+

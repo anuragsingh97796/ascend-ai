@@ -4,15 +4,31 @@ import React, { useEffect, useState, useRef } from "react";
 import { GlassCard } from "@/presentation/components/ui/GlassCard";
 import { PageTransition } from "@/presentation/components/ui/PageTransition";
 import { Orb } from "@/presentation/components/ui/Orb";
-import { initHistory, sendMessage } from "@/application/services/coachService";
+import { getHistory, sendMessage } from "@/application/services/coachService";
 import type { ChatMessage } from "@/application/services/coachService";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, AlertCircle } from "lucide-react";
 
 export default function CoachPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>(() => initHistory());
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    async function loadHistory() {
+      try {
+        const history = await getHistory();
+        setMessages(history);
+      } catch {
+        setError("Failed to load chat history.");
+      } finally {
+        setInitialLoading(false);
+      }
+    }
+    loadHistory();
+  }, []);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -24,20 +40,29 @@ export default function CoachPage() {
 
     const text = input.trim();
     setInput("");
+    setError(null);
 
     // Optimistic UI for user message
     const tempUserMsg: ChatMessage = {
-      id: `temp_${Date.now()}`,
+      id: "temp_" + Date.now(),
       role: "user",
       content: text,
       timestamp: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, tempUserMsg]);
-
     setLoading(true);
-    const updated = await sendMessage(text);
-    setMessages(updated);
-    setLoading(false);
+
+    try {
+      const assistantMsg = await sendMessage(text);
+      setMessages((prev) => [...prev, assistantMsg]);
+    } catch {
+      setError("Failed to send message to AI coach. Please try again.");
+      // Remove the optimistic user message if we fail
+      setMessages((prev) => prev.filter(m => m.id !== tempUserMsg.id));
+      setInput(text); // restore input
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -95,43 +120,54 @@ export default function CoachPage() {
               gap: 20,
             }}
           >
-            {messages.map((msg) => {
-              const isAssistant = msg.role === "assistant";
-              return (
-                <div
-                  key={msg.id}
-                  style={{
-                    display: "flex",
-                    justifyContent: isAssistant ? "flex-start" : "flex-end",
-                  }}
-                >
+            {initialLoading ? (
+              <div style={{ display: "flex", justifyContent: "center", padding: 40 }}>
+                <Loader2 size={24} className="animate-spin text-text-secondary" />
+              </div>
+            ) : messages.length === 0 ? (
+              <div style={{ textAlign: "center", color: "var(--text-secondary)", marginTop: 40 }}>
+                Send a message to start your coaching session.
+              </div>
+            ) : (
+              messages.map((msg) => {
+                const isAssistant = msg.role === "assistant";
+                return (
                   <div
+                    key={msg.id}
                     style={{
-                      maxWidth: "80%",
-                      padding: "12px 16px",
-                      borderRadius: "var(--radius-md)",
-                      background: isAssistant
-                        ? "rgba(255,255,255,0.05)"
-                        : "var(--accent)",
-                      color: "#fff",
-                      fontSize: 14,
-                      lineHeight: 1.5,
-                      border: isAssistant
-                        ? "1px solid var(--glass-border)"
-                        : "none",
-                      borderBottomLeftRadius: isAssistant
-                        ? 4
-                        : "var(--radius-md)",
-                      borderBottomRightRadius: !isAssistant
-                        ? 4
-                        : "var(--radius-md)",
+                      display: "flex",
+                      justifyContent: isAssistant ? "flex-start" : "flex-end",
                     }}
                   >
-                    {msg.content}
+                    <div
+                      style={{
+                        maxWidth: "80%",
+                        padding: "12px 16px",
+                        borderRadius: "var(--radius-md)",
+                        background: isAssistant
+                          ? "rgba(255,255,255,0.05)"
+                          : "var(--accent)",
+                        color: "#fff",
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        border: isAssistant
+                          ? "1px solid var(--glass-border)"
+                          : "none",
+                        borderBottomLeftRadius: isAssistant
+                          ? 4
+                          : "var(--radius-md)",
+                        borderBottomRightRadius: !isAssistant
+                          ? 4
+                          : "var(--radius-md)",
+                      }}
+                    >
+                      {msg.content}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
+            
             {loading && (
               <div style={{ display: "flex", justifyContent: "flex-start" }}>
                 <div
@@ -147,6 +183,14 @@ export default function CoachPage() {
                     size={16}
                     className="animate-spin text-text-secondary"
                   />
+                </div>
+              </div>
+            )}
+            {error && (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div style={{ color: "var(--rose-400)", display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+                  <AlertCircle size={16} />
+                  {error}
                 </div>
               </div>
             )}
@@ -199,3 +243,4 @@ export default function CoachPage() {
     </PageTransition>
   );
 }
+

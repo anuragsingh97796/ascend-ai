@@ -4,6 +4,7 @@ import com.ascendai.dto.ApiResponse;
 import com.ascendai.entity.CoachChat;
 import com.ascendai.repository.CoachChatRepository;
 import com.ascendai.security.UserDetailsImpl;
+import com.ascendai.service.AiCoachService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,8 +17,14 @@ import java.util.Map;
 @RequestMapping("/api/coach")
 public class CoachController {
 
+    private final CoachChatRepository coachChatRepository;
+    private final AiCoachService aiCoachService;
+
     @Autowired
-    private CoachChatRepository coachChatRepository;
+    public CoachController(CoachChatRepository coachChatRepository, AiCoachService aiCoachService) {
+        this.coachChatRepository = coachChatRepository;
+        this.aiCoachService = aiCoachService;
+    }
 
     @GetMapping("/history")
     public ResponseEntity<ApiResponse<List<CoachChat>>> getChatHistory(Authentication authentication) {
@@ -39,23 +46,13 @@ public class CoachController {
         CoachChat userMsg = new CoachChat(userDetails.getId(), "user", messageText);
         coachChatRepository.save(userMsg);
 
-        // Generate AI Response
-        String responseText = generateAiCoachResponse(messageText);
+        // Generate AI Response using real AI Service
+        String responseText = aiCoachService.generateCoachResponse(userDetails.getId(), messageText);
+        
+        // Save Assistant Message
         CoachChat assistantMsg = new CoachChat(userDetails.getId(), "assistant", responseText);
         CoachChat savedAssistantMsg = coachChatRepository.save(assistantMsg);
 
         return ResponseEntity.ok(ApiResponse.success("Coach response generated", savedAssistantMsg));
-    }
-
-    private String generateAiCoachResponse(String prompt) {
-        String p = prompt.toLowerCase();
-        if (p.contains("goal") || p.contains("focus")) {
-            return "Based on your current trajectory, breaking down your weekly target into 25-minute pomodoro blocks will maximize focus stability.";
-        } else if (p.contains("habit") || p.contains("streak")) {
-            return "Consistency is about momentum. Never miss two days in a row to maintain neural pathway reinforcement.";
-        } else if (p.contains("reflect") || p.contains("journal")) {
-            return "Writing down your reflections helps externalize cognitive load and process subconscious friction.";
-        }
-        return "I have analyzed your input. Let us align today's priorities with your long-term ascension targets.";
     }
 }
