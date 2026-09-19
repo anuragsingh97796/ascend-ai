@@ -16,7 +16,8 @@ interface ApiResponse<T> {
 export async function getHistory(): Promise<ChatMessage[]> {
   if (typeof window === "undefined") return [];
   try {
-    const res = await apiClient.get<ApiResponse<ChatMessage[]>>("/coach/history");
+    const res =
+      await apiClient.get<ApiResponse<ChatMessage[]>>("/coach/history");
     return res.data?.data || [];
   } catch (error) {
     console.error("Failed to load chat history:", error);

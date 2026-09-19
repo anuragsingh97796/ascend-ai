@@ -58,7 +58,7 @@ export default function CoachPage() {
     } catch {
       setError("Failed to send message to AI coach. Please try again.");
       // Remove the optimistic user message if we fail
-      setMessages((prev) => prev.filter(m => m.id !== tempUserMsg.id));
+      setMessages((prev) => prev.filter((m) => m.id !== tempUserMsg.id));
       setInput(text); // restore input
     } finally {
       setLoading(false);
@@ -121,11 +121,26 @@ export default function CoachPage() {
             }}
           >
             {initialLoading ? (
-              <div style={{ display: "flex", justifyContent: "center", padding: 40 }}>
-                <Loader2 size={24} className="animate-spin text-text-secondary" />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  padding: 40,
+                }}
+              >
+                <Loader2
+                  size={24}
+                  className="animate-spin text-text-secondary"
+                />
               </div>
             ) : messages.length === 0 ? (
-              <div style={{ textAlign: "center", color: "var(--text-secondary)", marginTop: 40 }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  color: "var(--text-secondary)",
+                  marginTop: 40,
+                }}
+              >
                 Send a message to start your coaching session.
               </div>
             ) : (
@@ -167,7 +182,7 @@ export default function CoachPage() {
                 );
               })
             )}
-            
+
             {loading && (
               <div style={{ display: "flex", justifyContent: "flex-start" }}>
                 <div
@@ -188,7 +203,15 @@ export default function CoachPage() {
             )}
             {error && (
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{ color: "var(--rose-400)", display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+                <div
+                  style={{
+                    color: "var(--rose-400)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontSize: 14,
+                  }}
+                >
                   <AlertCircle size={16} />
                   {error}
                 </div>
@@ -243,4 +266,3 @@ export default function CoachPage() {
     </PageTransition>
   );
 }
-
