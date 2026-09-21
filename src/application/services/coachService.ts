@@ -7,6 +7,13 @@ export interface ChatMessage {
   timestamp: string;
 }
 
+interface BackendChatMessage {
+  id: string;
+  sender: "user" | "assistant";
+  text: string;
+  timestamp: string;
+}
+
 interface ApiResponse<T> {
   data: T;
   message?: string;
@@ -16,9 +23,9 @@ interface ApiResponse<T> {
 export async function getHistory(): Promise<ChatMessage[]> {
   if (typeof window === "undefined") return [];
   try {
-    const res = await apiClient.get<ApiResponse<any[]>>("/coach/history");
+    const res = await apiClient.get<ApiResponse<BackendChatMessage[]>>("/coach/history");
     const data = res.data?.data || [];
-    return data.map((msg: any) => ({
+    return data.map((msg: BackendChatMessage) => ({
       id: msg.id,
       role: msg.sender || "assistant",
       content: msg.text || "",
@@ -32,7 +39,7 @@ export async function getHistory(): Promise<ChatMessage[]> {
 
 export async function sendMessage(userText: string): Promise<ChatMessage> {
   try {
-    const res = await apiClient.post<ApiResponse<any>>("/coach/chat", {
+    const res = await apiClient.post<ApiResponse<BackendChatMessage>>("/coach/chat", {
       message: userText,
     });
     const msg = res.data.data;
