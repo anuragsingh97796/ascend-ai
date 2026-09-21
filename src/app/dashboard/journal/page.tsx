@@ -75,19 +75,19 @@ export default function JournalPage() {
       if (editingEntry) {
         await updateMutation.mutateAsync({
           id: editingEntry.id,
-          updates: { title: title.trim(), content: content.trim(), tags, mood: "reflective" as any },
+          updates: { title: title.trim(), content: content.trim(), tags, mood: "reflective" as unknown as JournalEntry["mood"] },
         });
       } else {
         await createMutation.mutateAsync({
           title: title.trim(),
           content: content.trim(),
           tags: tags.length > 0 ? tags : ["daily"],
-          mood: "reflective" as any,
+          mood: "reflective" as unknown as JournalEntry["mood"],
         });
       }
       closeModal();
-    } catch (err: any) {
-      setFormError(err.message || "An error occurred");
+    } catch (err: unknown) {
+      setFormError(err instanceof Error ? err.message : "An error occurred");
     }
   };
 
@@ -95,7 +95,7 @@ export default function JournalPage() {
     if (window.confirm(`Are you sure you want to delete "${entryTitle}"?`)) {
       try {
         await deleteMutation.mutateAsync(id);
-      } catch (err) {
+      } catch {
         alert("Failed to delete journal entry.");
       }
     }
