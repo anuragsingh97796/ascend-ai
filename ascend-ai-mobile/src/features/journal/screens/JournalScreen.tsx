@@ -11,7 +11,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { useJournals, useCreateJournal, useDeleteJournal } from '../api/useJournalHooks';
+import { useJournals, useCreateJournal, useDeleteJournal, useUpdateJournal } from '../api/useJournalHooks';
 import { JournalEntry } from '@shared/types/domain/Journal';
 import { Book, Plus, Trash2, X } from 'lucide-react-native';
 import { Input } from '@shared/components/ui/Input';
@@ -21,9 +21,11 @@ export const JournalScreen = () => {
   const { data: journals = [], isLoading, refetch } = useJournals();
   const createJournalMutation = useCreateJournal();
   const deleteJournalMutation = useDeleteJournal();
+  const updateJournalMutation = useUpdateJournal();
 
   const [refreshing, setRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<JournalEntry | null>(null);
 
   // Form state
   const [title, setTitle] = useState('');
@@ -38,9 +40,19 @@ export const JournalScreen = () => {
   };
 
   const openCreateModal = () => {
+    setEditingEntry(null);
     setTitle('');
     setContent('');
     setTagsInput('');
+    setFormError(null);
+    setIsModalOpen(true);
+  };
+
+    const openEditModal = (entry: JournalEntry) => {
+    setEditingEntry(entry);
+    setTitle(entry.title);
+    setContent(entry.content);
+    setTagsInput((entry.tags || []).join(', '));
     setFormError(null);
     setIsModalOpen(true);
   };
@@ -100,7 +112,7 @@ export const JournalScreen = () => {
     }
   };
 
-  const isSubmitting = createJournalMutation.isPending;
+  const isSubmitting = createJournalMutation.isPending || updateJournalMutation.isPending;
 
   const renderJournalItem = ({ item }: { item: JournalEntry }) => (
     <View className="bg-white dark:bg-gray-900 rounded-xl p-4 mb-4 shadow-sm border border-gray-100 dark:border-gray-800">
@@ -117,6 +129,12 @@ export const JournalScreen = () => {
             onPress={() => handleDelete(item)}
             className="p-1.5 bg-red-50 dark:bg-red-900/20 rounded-lg ml-1"
           >
+                      <TouchableOpacity
+            onPress={() => openEditModal(item)}
+            className="p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+          >
+            <Book size={16} color="#2563EB" />
+          </TouchableOpacity>
             <Trash2 size={16} color="#EF4444" />
           </TouchableOpacity>
         </View>
@@ -181,7 +199,7 @@ export const JournalScreen = () => {
           <View className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-xl max-h-[90%]">
             <View className="flex-row justify-between items-center mb-4">
               <Text className="text-xl font-bold text-gray-900 dark:text-white">
-                New Journal Entry
+                {editingEntry ? 'Edit Journal Entry' : 'New Journal Entry'}
               </Text>
               <TouchableOpacity onPress={closeModal} className="p-1">
                 <X size={20} color="#6B7280" />
@@ -239,3 +257,5 @@ export const JournalScreen = () => {
     </View>
   );
 };
+
+
