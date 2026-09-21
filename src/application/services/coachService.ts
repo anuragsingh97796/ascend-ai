@@ -23,7 +23,8 @@ interface ApiResponse<T> {
 export async function getHistory(): Promise<ChatMessage[]> {
   if (typeof window === "undefined") return [];
   try {
-    const res = await apiClient.get<ApiResponse<BackendChatMessage[]>>("/coach/history");
+    const res =
+      await apiClient.get<ApiResponse<BackendChatMessage[]>>("/coach/history");
     const data = res.data?.data || [];
     return data.map((msg: BackendChatMessage) => ({
       id: msg.id,
@@ -39,9 +40,12 @@ export async function getHistory(): Promise<ChatMessage[]> {
 
 export async function sendMessage(userText: string): Promise<ChatMessage> {
   try {
-    const res = await apiClient.post<ApiResponse<BackendChatMessage>>("/coach/chat", {
-      message: userText,
-    });
+    const res = await apiClient.post<ApiResponse<BackendChatMessage>>(
+      "/coach/chat",
+      {
+        message: userText,
+      }
+    );
     const msg = res.data.data;
     return {
       id: msg.id,
@@ -54,4 +58,3 @@ export async function sendMessage(userText: string): Promise<ChatMessage> {
     throw new Error("Failed to send message to AI coach. Please try again.");
   }
 }
-
