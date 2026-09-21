@@ -51,14 +51,30 @@ public class AiCoachService {
                 "USER CONTEXT:\n" + contextStr;
 
         try {
+            if (openAiApiKey == null || openAiApiKey.trim().isEmpty() || "null".equals(openAiApiKey) || openAiApiKey.contains("YOUR_OPENAI_API_KEY")) {
+                return generateFallbackResponse(userMessage, goals, habits, journals);
+            }
             return chatClient.prompt()
                     .system(systemPrompt)
                     .user(userMessage)
                     .call()
                     .content();
         } catch (Exception e) {
-            e.printStackTrace(); return "ERROR: " + e.getMessage();
+            System.err.println("AI Coach API Error: " + e.getMessage());
+            return generateFallbackResponse(userMessage, goals, habits, journals);
         }
+    }
+
+    private String generateFallbackResponse(String userMessage, List<Goal> goals, List<Habit> habits, List<JournalEntry> journals) {
+        String response = "I am currently in fallback mode (AI features disabled). ";
+        if (userMessage.toLowerCase().contains("goal")) {
+            response += "You have " + goals.size() + " active goals. Keep focusing on them!";
+        } else if (userMessage.toLowerCase().contains("habit")) {
+            response += "You have " + habits.size() + " active habits. Stay consistent!";
+        } else {
+            response += "How can I help you with your goals and habits today?";
+        }
+        return response;
     }
 
     private String buildContextString(List<Goal> goals, List<Habit> habits, List<JournalEntry> journals) {
@@ -90,5 +106,6 @@ public class AiCoachService {
         return sb.toString();
     }
 }
+
 
 
