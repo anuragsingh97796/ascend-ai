@@ -16,9 +16,14 @@ interface ApiResponse<T> {
 export async function getHistory(): Promise<ChatMessage[]> {
   if (typeof window === "undefined") return [];
   try {
-    const res =
-      await apiClient.get<ApiResponse<ChatMessage[]>>("/coach/history");
-    return res.data?.data || [];
+    const res = await apiClient.get<ApiResponse<any[]>>("/coach/history");
+    const data = res.data?.data || [];
+    return data.map((msg: any) => ({
+      id: msg.id,
+      role: msg.sender || "assistant",
+      content: msg.text || "",
+      timestamp: msg.timestamp,
+    }));
   } catch (error) {
     console.error("Failed to load chat history:", error);
     throw new Error("Failed to load chat history");
@@ -27,12 +32,19 @@ export async function getHistory(): Promise<ChatMessage[]> {
 
 export async function sendMessage(userText: string): Promise<ChatMessage> {
   try {
-    const res = await apiClient.post<ApiResponse<ChatMessage>>("/coach/chat", {
+    const res = await apiClient.post<ApiResponse<any>>("/coach/chat", {
       message: userText,
     });
-    return res.data.data;
+    const msg = res.data.data;
+    return {
+      id: msg.id,
+      role: msg.sender || "assistant",
+      content: msg.text || "",
+      timestamp: msg.timestamp,
+    };
   } catch (error) {
     console.error("Failed to send message:", error);
     throw new Error("Failed to send message to AI coach. Please try again.");
   }
 }
+
