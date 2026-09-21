@@ -24,6 +24,9 @@ import java.util.Arrays;
 @Configuration
 public class WebSecurityConfig {
 
+    @org.springframework.beans.factory.annotation.Value("${cors.allowed-origins}")
+    private String[] allowedOrigins;
+
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
@@ -73,7 +76,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8081"));
+        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
@@ -82,3 +85,5 @@ public class WebSecurityConfig {
         return source;
     }
 }
+
+
